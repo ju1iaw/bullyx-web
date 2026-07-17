@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import DemoRequestModal from './DemoRequestModal'
 import './MarketingSite.css'
 
 const Arrow = () => <span aria-hidden="true">↗</span>
@@ -19,14 +20,7 @@ function Reveal({ children, className = '' }) {
 export default function MarketingSite() {
   const [menu, setMenu] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
-  useEffect(() => {
-    const onMove = (event) => {
-      document.documentElement.style.setProperty('--mx', `${event.clientX}px`)
-      document.documentElement.style.setProperty('--my', `${event.clientY}px`)
-    }
-    window.addEventListener('pointermove', onMove)
-    return () => window.removeEventListener('pointermove', onMove)
-  }, [])
+  const [demoOpen, setDemoOpen] = useState(false)
 
   const steps = [
     ['01', 'Extract', 'Turn scattered guidance into structured candidate policies, each tied to its original evidence.'],
@@ -35,9 +29,13 @@ export default function MarketingSite() {
     ['04', 'Prove', 'Record every outcome in a tamper-evident audit chain your team can independently verify.'],
   ]
 
+  function openDemo() {
+    setMenu(false)
+    setDemoOpen(true)
+  }
+
   return (
     <div className="bx-site">
-      <div className="bx-cursor-glow" />
       <header className="bx-nav">
         <a className="bx-logo" href="#top" aria-label="BullyX home"><i>B</i><strong>BULLY<span>X</span></strong></a>
         <nav className={menu ? 'open' : ''} aria-label="Main navigation">
@@ -45,7 +43,7 @@ export default function MarketingSite() {
           <a href="#workflow" onClick={() => setMenu(false)}>How it works</a>
           <a href="#security" onClick={() => setMenu(false)}>Security</a>
         </nav>
-        <a className="bx-nav-cta" href="?console">Launch console <Arrow /></a>
+        <button className="bx-nav-cta" type="button" onClick={openDemo}>Request a demo <Arrow /></button>
         <button className="bx-menu" onClick={() => setMenu(!menu)} aria-label="Toggle menu"><span/><span/></button>
       </header>
 
@@ -58,7 +56,7 @@ export default function MarketingSite() {
             <h1>Give every AI agent<br/><em>rules it can’t ignore.</em></h1>
             <p>BullyX turns operational knowledge into governed, executable policy — so every automated decision is approved, explainable, and provable.</p>
             <div className="bx-actions">
-              <a className="bx-primary" href="?console">Explore the platform <Arrow /></a>
+              <button className="bx-primary" type="button" onClick={openDemo}>Request a demo <Arrow /></button>
               <a className="bx-text-link" href="#workflow">See how it works <span>↓</span></a>
             </div>
           </div>
@@ -98,7 +96,7 @@ export default function MarketingSite() {
         </section>
 
         <section className="bx-control" id="security">
-          <Reveal className="bx-control-copy"><span className="bx-number">03 / CONTROL BY DESIGN</span><h2>Your rules.<br/>Your evidence.<br/><em>Your control.</em></h2><p>BullyX separates probabilistic extraction from deterministic execution. AI can propose. Humans approve. Software enforces.</p><a className="bx-dark-link" href="?console">Open the working demo <Arrow /></a></Reveal>
+          <Reveal className="bx-control-copy"><span className="bx-number">03 / CONTROL BY DESIGN</span><h2>Your rules.<br/>Your evidence.<br/><em>Your control.</em></h2><p>BullyX separates probabilistic extraction from deterministic execution. AI can propose. Humans approve. Software enforces.</p><button className="bx-dark-link" type="button" onClick={openDemo}>Request a demo <Arrow /></button></Reveal>
           <Reveal className="bx-ledger">
             <div className="bx-ledger-head"><span>AUDIT LEDGER</span><b><i/> VERIFIED</b></div>
             {[['#0042','PROVISIONAL CREDIT','POLICY v2.1'],['#0041','MANUAL REVIEW','POLICY v1.4'],['#0040','DECLINE','POLICY v3.0']].map((r,i)=><div className="bx-ledger-row" key={r[0]} style={{'--delay': `${i*.12}s`}}><span>{r[0]}</span><strong>{r[1]}</strong><small>{r[2]}</small><b>✓</b></div>)}
@@ -107,10 +105,11 @@ export default function MarketingSite() {
         </section>
 
         <section className="bx-final">
-          <div className="bx-final-grid"/><Reveal><span>POLICY IS POWER.</span><h2>Make yours<br/>executable.</h2><a href="?console">Launch BullyX <Arrow /></a></Reveal>
+          <div className="bx-final-grid"/><Reveal><span>POLICY IS POWER.</span><h2>Make yours<br/>executable.</h2><button type="button" onClick={openDemo}>Request a demo <Arrow /></button></Reveal>
         </section>
       </main>
       <footer><a className="bx-logo" href="#top"><i>B</i><strong>BULLY<span>X</span></strong></a><p>Governed policy infrastructure for AI agents.</p><span>© 2026 BULLYX, INC.</span></footer>
+      <DemoRequestModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </div>
   )
 }
