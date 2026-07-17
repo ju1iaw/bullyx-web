@@ -1,0 +1,72 @@
+:root {
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #17201d;
+  background: #f2f1ea;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #17201d;
+  --ink-soft: #5d6863;
+  --shell: #101614;
+  --paper: #fbfaf5;
+  --canvas: #f2f1ea;
+  --line: #d9d9cf;
+  --line-strong: #c3c6ba;
+  --green: #176b50;
+  --green-dark: #0e4c39;
+  --mint: #b8f1d4;
+  --lime: #d9f575;
+  --amber: #f1c75b;
+  --red: #a9473d;
+  --shadow: 0 20px 50px rgba(22, 30, 27, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--canvas);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 80% 5%, rgba(217, 245, 117, 0.13), transparent 25rem),
+    var(--canvas);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(23, 107, 80, 0.28);
+  outline-offset: 2px;
+}
+
+code,
+pre,
+.code-editor {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+::selection {
+  background: var(--mint);
+  color: var(--shell);
+}
