@@ -101,9 +101,9 @@ export default function DemoRequestModal({ open, onClose }) {
         ) : (
           <>
             <span className="bx-number">REQUEST A DEMO</span>
-            <h2 id={titleId}>Request a demo for your financial team.</h2>
+            <h2 id={titleId}>Explore a controlled payment-operations pilot.</h2>
             <p className="bx-modal-lead">
-              BullyX is only for financial companies. Tell us about your institution and we’ll schedule a walkthrough.
+              Tell us about your payment workflows, the agents you are introducing, and where human review matters most.
             </p>
             <form className="bx-demo-form" onSubmit={handleSubmit}>
               <label>
@@ -142,7 +142,7 @@ export default function DemoRequestModal({ open, onClose }) {
                   rows={4}
                   value={form.message}
                   onChange={update('message')}
-                  placeholder="Agents, workflows, compliance constraints…"
+                placeholder="Payment cases, agents, approval requirements…"
                 />
               </label>
               {status === 'error' && <p className="bx-form-error" role="alert">{error}</p>}
