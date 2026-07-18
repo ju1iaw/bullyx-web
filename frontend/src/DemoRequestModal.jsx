@@ -101,9 +101,9 @@ export default function DemoRequestModal({ open, onClose }) {
         ) : (
           <>
             <span className="bx-number">REQUEST A DEMO</span>
-            <h2 id={titleId}>Request Bullyx for your team.</h2>
+            <h2 id={titleId}>Request a demo for your financial team.</h2>
             <p className="bx-modal-lead">
-              Tell us a bit about your team and we’ll schedule a walkthrough of governed policy for AI agents.
+              BullyX is only for financial companies. Tell us about your institution and we’ll schedule a walkthrough.
             </p>
             <form className="bx-demo-form" onSubmit={handleSubmit}>
               <label>
