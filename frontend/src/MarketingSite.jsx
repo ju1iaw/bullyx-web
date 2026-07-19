@@ -48,6 +48,26 @@ const principles = [
   'Administrators can disable one agent, one capability, or all execution.',
 ]
 
+const showExtendedSections = false
+
+const useCases = [
+  {
+    label: 'Dispute evidence',
+    title: '$600 order-not-received dispute',
+    body: <>Bullyx assembles the <strong>payment and dispute data, response deadline, customer conversations, delivery evidence, applicable policy, and missing information</strong>. An agent can propose the next step, but the <strong>designated payment-operations reviewer approves or rejects the exact proposal</strong>.</>,
+  },
+  {
+    label: 'Customer communication',
+    title: 'Review an exact customer message',
+    body: <>An agent prepares a customer-visible draft using permitted case evidence. The reviewer sees the <strong>recipients, subject, message, attachments, policy authority, and case context</strong> before anything can be sent.</>,
+  },
+  {
+    label: 'Shadow mode',
+    title: 'Compare recommendations before execution',
+    body: <>Teams can compare an agent’s policy-bound recommendation with the actual human outcome. <strong>Shadow recommendations grant no authority</strong> and cannot invoke the action executor.</>,
+  },
+]
+
 const connectorGroups = [
   {
     type: 'Live data integrations',
@@ -147,11 +167,47 @@ function ConnectorModal({ open, onClose }) {
   )
 }
 
+function UseCaseVisual({ index }) {
+  if (index === 1) {
+    return (
+      <div className="bx-case-mini bx-case-mini-message" aria-label="Customer message awaiting approval">
+        <div className="bx-mini-head"><span>MESSAGE DRAFT</span><b>Awaiting review</b></div>
+        <div className="bx-mini-field"><small>TO</small><strong>Customer on case PAY-2048</strong></div>
+        <div className="bx-mini-field"><small>SUBJECT</small><strong>Delivery evidence requested</strong></div>
+        <div className="bx-mini-copy"><i/><i/><i/><i/></div>
+        <div className="bx-mini-actions"><span>Reject</span><b>Approve exact draft</b></div>
+      </div>
+    )
+  }
+
+  if (index === 2) {
+    return (
+      <div className="bx-case-mini bx-case-mini-shadow" aria-label="Shadow recommendation comparison">
+        <div className="bx-mini-head"><span>SHADOW COMPARISON</span><b>No authority granted</b></div>
+        <div className="bx-shadow-row"><span>Agent recommendation</span><strong>Request evidence</strong></div>
+        <div className="bx-shadow-row"><span>Human outcome</span><strong>Request evidence</strong></div>
+        <div className="bx-shadow-result"><i>✓</i><div><small>NEXT ACTION</small><b>Agreement recorded</b></div></div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="bx-case-mini" aria-label="Six hundred dollar dispute case">
+      <div className="bx-mini-head"><span>DISPUTE · $600.00</span><b>4 days remaining</b></div>
+      <div className="bx-mini-evidence"><i>✓</i><span>Payment and dispute data</span><small>Ready</small></div>
+      <div className="bx-mini-evidence"><i>✓</i><span>Customer conversation</span><small>Ready</small></div>
+      <div className="bx-mini-evidence missing"><i>!</i><span>Proof of delivery</span><small>Missing</small></div>
+      <div className="bx-mini-proposal"><small>AGENT PROPOSAL</small><strong>Request delivery evidence</strong><span>Human review required</span></div>
+    </div>
+  )
+}
+
 export default function MarketingSite() {
   const [menu, setMenu] = useState(false)
   const [demoOpen, setDemoOpen] = useState(false)
   const [connectorsOpen, setConnectorsOpen] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
+  const [activeUseCase, setActiveUseCase] = useState(0)
 
   function closeMenu() { setMenu(false) }
   function openDemo() { closeMenu(); setDemoOpen(true) }
@@ -163,10 +219,9 @@ export default function MarketingSite() {
           <img src="/bullyx-logo-light.png" alt="Bullyx" width="140" height="105" />
         </a>
         <nav className={menu ? 'open' : ''} aria-label="Main navigation">
-          <a href="#product" onClick={closeMenu}>Product</a>
+          <a href="#product" onClick={closeMenu}>Overview</a>
           <a href="#how-it-works" onClick={closeMenu}>How it works</a>
-          <a href="#security" onClick={closeMenu}>Security</a>
-          <a href="#use-case" onClick={closeMenu}>Use cases</a>
+          <a href="#use-cases" onClick={closeMenu}>Use cases</a>
         </nav>
         <div className="bx-nav-actions">
           <a className="bx-signin" href="/login">Sign in</a>
@@ -230,18 +285,63 @@ export default function MarketingSite() {
           </div>
         </section>
 
-        <section className="bx-problem" id="product">
-          <Reveal className="bx-section-intro">
-            <span className="bx-kicker">THE OPERATING PROBLEM</span>
-            <h2>One payment case.<br/>Six places to look.</h2>
-            <p>Disputes and refunds rarely live in one system. An analyst may check Stripe, Zendesk, Slack, email, documents, fraud tools, and an internal dashboard before deciding what to do.</p>
-          </Reveal>
-          <Reveal className="bx-system-strip" aria-label="Example company systems">
-            {['Payment processor', 'Support', 'Slack + email', 'Documents', 'Fraud + identity', 'Internal tools'].map((item, i) => <div key={item}><span>0{i + 1}</span>{item}</div>)}
-          </Reveal>
-          <Reveal className="bx-problem-bottom">
-            <p>An AI agent can gather and interpret that information. The company still needs a reliable answer to four questions:</p>
-            <ol><li>What can it see?</li><li>Which policy applies?</li><li>Who must approve?</li><li>What may actually run?</li></ol>
+        <section className="bx-overview" id="product">
+          <Reveal className="bx-overview-grid">
+            <article>
+              <span className="bx-kicker">WHAT’S THE PROBLEM?</span>
+              <h2>Payment work is spread across too many systems.</h2>
+              <p>Payment teams investigate disputes, refunds, and customer issues across <strong>payment processors, support systems, email, documents, communication tools, fraud systems, and internal dashboards</strong>. As companies introduce AI agents into this work, they need a dependable means of <strong>limiting what each agent may access</strong>, establishing which approved procedures govern its recommendations, determining when a person must review a proposal, and preventing unsupported actions from reaching customers or providers.</p>
+              <div className="bx-fragmented-visual" aria-label="A payment case spread across company systems">
+                <div className="bx-fragmented-case"><small>PAYMENT CASE</small><strong>Order not received</strong><span>$600 dispute</span></div>
+                <div className="bx-fragmented-systems">
+                  {[
+                    ['Payments', ['Stripe', 'Plaid']],
+                    ['Support', ['Zendesk']],
+                    ['Email', ['Gmail']],
+                    ['Documents', ['Google Drive', 'Notion']],
+                    ['Fraud tools', ['Plaid']],
+                    ['Internal data', ['GitHub', 'Granola']],
+                  ].map(([system, logos], index) => (
+                    <span key={system}>
+                      <i>{String(index + 1).padStart(2, '0')}</i>
+                      <b>{system}</b>
+                      <span className="bx-fragmented-logos">
+                        {logos.map((name) => <img key={name} src={system === 'Support' && name === 'Zendesk' ? '/connectors/zendesk-box.png' : connectorLogos[name]} alt={`${name} logo`} />)}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+                <p><span>6 systems</span><span>1 decision</span><span>No shared control</span></p>
+              </div>
+            </article>
+            <article>
+              <span className="bx-kicker">OUR SOLUTION</span>
+              <h2>A control layer between proposal and action.</h2>
+              <p>Bullyx connects permitted operational information, organizes payment cases and evidence, and gives each external agent a <strong>stable identity with narrowly scoped API access</strong>. Proposed actions are evaluated against <strong>structured policies that authorized people have approved</strong>. Sensitive proposals are routed to designated reviewers, <strong>only explicitly implemented capabilities may execute</strong>, and the complete sequence of evidence, policy decisions, approvals, execution attempts, and provider results is preserved in a tamper-evident history.</p>
+              <div className="bx-control-visual" aria-label="Bullyx control flow from agent proposal to governed execution">
+                <div className="bx-control-node"><small>EXTERNAL AGENT</small><strong>Proposes an action</strong><span>Scoped API identity</span></div>
+                <i className="bx-control-arrow">↓</i>
+                <div className="bx-control-node primary"><small>BULLYX</small><strong>Checks access + policy</strong><span>Fails closed on ambiguity</span></div>
+                <div className="bx-control-branch"><span>Policy requires review</span><i>→</i></div>
+                <div className="bx-control-node review"><small>HUMAN REVIEWER</small><strong>Approves the exact proposal</strong><span>Approval ≠ execution</span></div>
+                <i className="bx-control-arrow">↓</i>
+                <div className="bx-control-node final"><small>SUPPORTED CAPABILITY</small><strong>Execute + record</strong><span>Provider result preserved</span></div>
+              </div>
+            </article>
+            <article className="bx-usecase-slider" id="use-cases">
+              <span className="bx-kicker">USE CASES</span>
+              <div className="bx-usecase-slide" aria-live="polite">
+                <small>{useCases[activeUseCase].label}</small>
+                <h2>{useCases[activeUseCase].title}</h2>
+                <p>{useCases[activeUseCase].body}</p>
+                <UseCaseVisual index={activeUseCase} />
+              </div>
+              <div className="bx-usecase-controls">
+                <button type="button" aria-label="Previous use case" onClick={() => setActiveUseCase((activeUseCase - 1 + useCases.length) % useCases.length)}>←</button>
+                <span>{String(activeUseCase + 1).padStart(2, '0')} / {String(useCases.length).padStart(2, '0')}</span>
+                <button type="button" aria-label="Next use case" onClick={() => setActiveUseCase((activeUseCase + 1) % useCases.length)}>→</button>
+              </div>
+            </article>
           </Reveal>
         </section>
 
@@ -263,7 +363,7 @@ export default function MarketingSite() {
           </Reveal>
         </section>
 
-        <section className="bx-use-case" id="use-case">
+        {showExtendedSections && <section className="bx-use-case" id="use-case">
           <Reveal className="bx-use-copy">
             <span className="bx-kicker">A REALISTIC PAYMENT WORKFLOW</span>
             <h2>A customer disputes a $600 payment.</h2>
@@ -281,9 +381,9 @@ export default function MarketingSite() {
             <div className="bx-review-actions"><button type="button">Reject</button><button type="button" className="approve">Approve exact proposal</button></div>
             <p>The history preserves the evidence, policy version, agent, reviewer, execution attempt, and provider result.</p>
           </Reveal>
-        </section>
+        </section>}
 
-        <section className="bx-capabilities">
+        {showExtendedSections && <section className="bx-capabilities">
           <Reveal className="bx-section-intro">
             <span className="bx-kicker">PRODUCT CAPABILITIES</span>
             <h2>One control layer for the work around the payment.</h2>
@@ -292,9 +392,9 @@ export default function MarketingSite() {
           <Reveal className="bx-capability-list">
             {capabilities.map(([title, body], i) => <article key={title}><span>0{i + 1}</span><h3>{title}</h3><p>{body}</p></article>)}
           </Reveal>
-        </section>
+        </section>}
 
-        <section className="bx-security" id="security">
+        {showExtendedSections && <section className="bx-security" id="security">
           <Reveal className="bx-security-copy">
             <span className="bx-kicker">CONTROL BY DESIGN</span>
             <h2>Permission is explicit.<br/>Ambiguity stops the action.</h2>
@@ -303,9 +403,9 @@ export default function MarketingSite() {
           <Reveal className="bx-principles">
             {principles.map((item, i) => <div key={item}><span>{String(i + 1).padStart(2, '0')}</span><p>{item}</p></div>)}
           </Reveal>
-        </section>
+        </section>}
 
-        <section className="bx-scope">
+        {showExtendedSections && <section className="bx-scope">
           <Reveal className="bx-scope-copy">
             <span className="bx-kicker">CURRENT PRODUCT SCOPE</span>
             <h2>Built for controlled pilots, not hands-off automation.</h2>
@@ -315,7 +415,7 @@ export default function MarketingSite() {
             <div><span>AVAILABLE IN TODAY’S PRODUCT</span><ul><li>Stripe read-only payment-case ingestion</li><li>Payment case and evidence workspace</li><li>Reviewed, versioned company policies</li><li>Scoped agent identities and credentials</li><li>Human approval routing and audit history</li><li>Governed internal actions and message drafts</li></ul></div>
             <div className="caution"><span>IMPORTANT BOUNDARIES</span><ul><li>Payment-provider writes remain gated</li><li>Customer-visible messages require approval</li><li>Adding a connector does not grant write access</li><li>Bullyx does not automatically resolve disputes</li><li>Current deployments are controlled pilots</li></ul></div>
           </Reveal>
-        </section>
+        </section>}
 
         <section className="bx-final">
           <Reveal>
