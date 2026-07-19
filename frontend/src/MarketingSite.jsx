@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import DemoRequestModal from './DemoRequestModal'
+import { useAuth } from './AuthContext'
 import './MarketingSite.css'
 
 const Arrow = () => <span aria-hidden="true">↗</span>
@@ -203,6 +204,7 @@ function UseCaseVisual({ index }) {
 }
 
 export default function MarketingSite() {
+  const { user, profile } = useAuth()
   const [menu, setMenu] = useState(false)
   const [demoOpen, setDemoOpen] = useState(false)
   const [connectorsOpen, setConnectorsOpen] = useState(false)
@@ -224,7 +226,7 @@ export default function MarketingSite() {
           <a href="#use-cases" onClick={closeMenu}>Use cases</a>
         </nav>
         <div className="bx-nav-actions">
-          <a className="bx-signin" href="/login">Sign in</a>
+          {user ? <a className="bx-profile-link" href="/dashboard" aria-label="Open your dashboard">{profile?.avatar_url ? <img src={profile.avatar_url} alt="" /> : <span>{profile?.full_name?.[0] || user.email?.[0] || ''}</span>}</a> : <a className="bx-signin" href="/login">Sign in</a>}
           <button className="bx-nav-cta" type="button" onClick={openDemo}>Request a demo <Arrow /></button>
         </div>
         <button className="bx-menu" type="button" onClick={() => setMenu(!menu)} aria-expanded={menu} aria-label="Toggle menu"><span/><span/></button>

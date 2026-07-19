@@ -67,3 +67,22 @@ cp public/CNAME ../docs/CNAME 2>/dev/null || cp ../CNAME ../docs/CNAME
 Then commit and push `docs/` (and any source changes) to `main`.
 
 `.env` is gitignored on purpose. The Formspree ID is embedded into the JS bundle at build time, so you must rebuild `docs/` on a machine that has `.env` set before deploying.
+
+## Accounts and organizations (Supabase)
+
+The account area uses Supabase Auth, Postgres, Row Level Security, and Storage. This keeps passwords out of the website and makes profile and organization data durable across devices.
+
+### One-time setup
+
+1. Create a Supabase project at [supabase.com](https://supabase.com).
+2. Open **SQL editor**, paste in [`supabase/schema.sql`](supabase/schema.sql), and run it.
+3. Under **Authentication → URL Configuration**, set the site URL to `https://bullyx.tech` and add `http://127.0.0.1:5173/**` as a local redirect URL.
+4. Keep **Confirm email** enabled under **Authentication → Providers → Email** to require email verification.
+5. Copy `frontend/.env.example` to `frontend/.env`, then add the project URL and public anonymous key from **Project Settings → API**:
+
+```bash
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-public-anon-key
+```
+
+6. Rebuild and deploy `docs/` using the steps above. The anonymous key is designed for browser use; access is enforced by the included database policies. Never put a Supabase service-role key in this site.
