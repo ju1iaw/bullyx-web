@@ -20,3 +20,42 @@
 .bx-final .bx-actions a{border-bottom-color:#84666c}
 .bx-nav-cta:hover,.bx-primary:hover{background:var(--purple)}
 .bx-hero h1 em{color:var(--purple)}
+
+.bx-hero-product{position:relative;z-index:1;min-width:0}
+.bx-connector-rail{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px;margin-top:16px}
+.bx-connector-window{min-width:0;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.bx-connector-track{display:flex;width:max-content;gap:8px;animation:bx-connectors-scroll 28s linear infinite}
+.bx-connector-track>a{width:56px;min-height:70px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;font-size:9px;text-align:center}
+.bx-connector-track>a .bx-connector-placeholder{transition:transform .2s,border-color .2s,box-shadow .2s}
+.bx-connector-track>a>.bx-connector-name{max-width:68px;opacity:0;transform:translateY(-4px);transition:opacity .2s,transform .2s;white-space:nowrap;pointer-events:none}
+.bx-connector-track>a:hover .bx-connector-placeholder,.bx-connector-track>a:focus-visible .bx-connector-placeholder{transform:scale(1.1)}
+.bx-connector-track>a:hover>.bx-connector-name,.bx-connector-track>a:focus-visible>.bx-connector-name{opacity:1;transform:none}
+.bx-connector-placeholder{display:grid;place-items:center;width:48px;height:48px;flex:0 0 48px;padding:4px;background:transparent;border:0;box-shadow:none}
+.bx-connector-placeholder img{display:block;width:100%;height:100%;object-fit:contain}
+.bx-connector-rail>button{align-self:stretch;border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;padding:0 16px;display:flex;align-items:center;gap:10px;font-size:10px;font-weight:600;white-space:nowrap;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.bx-connector-rail>button span{color:var(--purple);font-size:16px}
+.bx-connector-rail>button:hover{background:var(--purple);border-color:var(--purple);color:var(--deep)}
+.bx-connector-rail>button:hover span{color:var(--deep)}
+@keyframes bx-connectors-scroll{to{transform:translateX(calc(-50% - 6px))}}
+
+.bx-connectors-modal-root{position:fixed;inset:0;z-index:110;background:rgba(16,47,39,.8);display:grid;place-items:center;padding:24px}
+.bx-connectors-modal{width:min(1040px,100%);max-height:min(90vh,880px);background:var(--light);color:var(--ink);border:1px solid var(--border);box-shadow:0 30px 80px rgba(0,0,0,.35);display:flex;flex-direction:column}
+.bx-connectors-modal>header{display:flex;justify-content:space-between;gap:30px;padding:30px 34px 12px}
+.bx-connectors-modal>header span{font-size:9px;line-height:1.3;letter-spacing:.11em;text-transform:uppercase;color:var(--green);font-weight:600}
+.bx-connector-group h3{font-size:12px;line-height:1.3;letter-spacing:.11em;text-transform:uppercase;color:var(--green);font-weight:600}
+.bx-connectors-modal>header h2{font-size:clamp(28px,4vw,42px);line-height:1.08;letter-spacing:-.04em;margin:10px 0 0}
+.bx-connectors-modal>header button{align-self:flex-start;border:0;background:none;color:var(--muted);font-size:30px;line-height:1;cursor:pointer}
+.bx-connectors-lead{color:var(--muted);line-height:1.6;font-size:15px;margin:0;padding:8px 34px 24px}
+.bx-connectors-scroll{overflow-y:auto;padding:0 34px 20px}
+.bx-connector-group{padding:32px 0 38px;border-bottom:1px solid var(--border)}
+.bx-connector-group:last-child{border-bottom:0}
+.bx-connector-group h3{margin:0 0 26px}
+.bx-connector-grid{display:grid;grid-template-columns:repeat(auto-fit,76px);gap:24px 38px;justify-content:start}
+.bx-connector-grid a{display:flex;flex-direction:column;align-items:flex-start;gap:11px;color:var(--ink);font-size:14px;font-weight:600}
+.bx-connector-grid a>span{line-height:1.25}
+.bx-connector-grid a>small{width:100px;color:var(--muted);font-size:10px;font-weight:400;line-height:1.4}
+.bx-connector-grid a .bx-connector-placeholder{width:76px;height:76px;flex-basis:76px;background:transparent;border:0;box-shadow:none;transition:transform .2s}
+.bx-connector-grid a:hover .bx-connector-placeholder{transform:translateY(-2px) scale(1.06)}
+
+@media(max-width:760px){.bx-connector-rail{grid-template-columns:1fr}.bx-connector-rail>button{min-height:48px;justify-content:center}.bx-connector-grid{grid-template-columns:repeat(3,68px);gap:22px 34px}.bx-connector-grid a .bx-connector-placeholder{width:68px;height:68px;flex-basis:68px}.bx-connectors-modal>header,.bx-connectors-lead{padding-left:22px;padding-right:22px}.bx-connectors-scroll{padding-left:22px;padding-right:22px}}
+@media(max-width:480px){.bx-connector-grid{grid-template-columns:repeat(2,68px)}}

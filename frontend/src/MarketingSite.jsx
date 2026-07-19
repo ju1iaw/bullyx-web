@@ -48,9 +48,109 @@ const principles = [
   'Administrators can disable one agent, one capability, or all execution.',
 ]
 
+const connectorGroups = [
+  {
+    type: 'Live data integrations',
+    items: [
+      ['Stripe', 'https://stripe.com', 'Payments · read-only'],
+      ['Plaid', 'https://plaid.com', 'Banking data · read-only'],
+      ['Gmail', 'https://www.google.com/gmail/about/', 'Email context'],
+      ['GitHub', 'https://github.com', 'Engineering context'],
+      ['Twilio Conversations', 'https://www.twilio.com/conversations', 'Business conversations · read-only'],
+      ['Granola', 'https://www.granola.ai', 'Meeting context · read-only'],
+    ],
+  },
+  {
+    type: 'Governed action integrations',
+    items: [
+      ['GitHub', 'https://github.com', 'Approved issue creation'],
+      ['Zendesk', 'https://www.zendesk.com', 'Tickets, internal notes, reply drafts'],
+      ['Jira Cloud', 'https://www.atlassian.com/software/jira', 'Approved issue creation'],
+      ['Gmail', 'https://www.google.com/gmail/about/', 'Approved draft creation and sending'],
+    ],
+  },
+  {
+    type: 'Planned and import-supported sources',
+    items: [
+      ['Slack', 'https://slack.com', 'Communication'],
+      ['Google Drive', 'https://workspace.google.com/products/drive/', 'Documents'],
+      ['Notion', 'https://www.notion.com', 'Knowledge'],
+      ['Google Calendar', 'https://workspace.google.com/products/calendar/', 'Calendar'],
+    ],
+  },
+]
+
+const connectorItems = Array.from(
+  new Map(connectorGroups.flatMap((group) => group.items).map((item) => [item[0], item])).values(),
+)
+
+const connectorLogos = {
+  Stripe: '/connectors/stripe.png',
+  Plaid: '/connectors/plaid.png',
+  Gmail: '/connectors/gmail.png',
+  GitHub: '/connectors/github.png',
+  'Twilio Conversations': '/connectors/twilio.png',
+  Granola: '/connectors/granola.png',
+  Zendesk: '/connectors/zendesk.png',
+  'Jira Cloud': '/connectors/jira.png',
+  Slack: '/connectors/slack.png',
+  'Google Drive': '/connectors/drive.png',
+  Notion: '/connectors/notion.png',
+  'Google Calendar': '/connectors/calendar.png',
+}
+
+function ConnectorPlaceholder({ name }) {
+  const logo = connectorLogos[name]
+  return (
+    <span className="bx-connector-placeholder">
+      {logo && <img src={logo} alt={`${name} logo`} />}
+    </span>
+  )
+}
+
+function ConnectorModal({ open, onClose }) {
+  useEffect(() => {
+    if (!open) return undefined
+    const handleKey = (event) => { if (event.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return (
+    <div className="bx-connectors-modal-root" role="presentation" onClick={onClose}>
+      <section className="bx-connectors-modal" role="dialog" aria-modal="true" aria-labelledby="connectors-title" onClick={(event) => event.stopPropagation()}>
+        <header>
+          <div><span>CONNECTION CATALOG</span><h2 id="connectors-title">Integration surfaces and current availability.</h2></div>
+          <button type="button" onClick={onClose} aria-label="Close connector directory">×</button>
+        </header>
+        <p className="bx-connectors-lead">Bullyx uses live data connections, narrowly governed action capabilities, and import-supported sources. A provider’s presence never grants general write access.</p>
+        <div className="bx-connectors-scroll">
+          {connectorGroups.map((group) => (
+            <section className="bx-connector-group" key={group.type}>
+              <h3>{group.type}</h3>
+              <div className="bx-connector-grid">
+                {group.items.map(([name, url, description]) => (
+                  <a key={name} href={url} target="_blank" rel="noreferrer" aria-label={`Visit ${name}`}>
+                    <ConnectorPlaceholder name={name} />
+                    <span>{name}</span>
+                    <small>{description}</small>
+                  </a>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+}
+
 export default function MarketingSite() {
   const [menu, setMenu] = useState(false)
   const [demoOpen, setDemoOpen] = useState(false)
+  const [connectorsOpen, setConnectorsOpen] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
 
   function closeMenu() { setMenu(false) }
@@ -88,30 +188,45 @@ export default function MarketingSite() {
             <p className="bx-roles">For payment operations, risk, compliance, and engineering teams introducing agents.</p>
           </div>
 
-          <div className="bx-product-shot" aria-label="Payment dispute awaiting human approval">
-            <div className="bx-shot-bar"><span>PAYMENT CASE</span><div><i /> Awaiting approval</div></div>
-            <div className="bx-case-head">
-              <div><small>DISPUTE · PAY-DEMO-0001</small><h2>Order not received</h2><p>Response due Jul 22 · 4 days</p></div>
-              <strong>$600.00 <small>USD</small></strong>
-            </div>
-            <div className="bx-case-grid">
-              <div className="bx-case-main">
-                <div className="bx-panel-title">Evidence</div>
-                <div className="bx-evidence ok"><b>✓</b><span>Customer conversation<small>Imported from support</small></span><em>Ready</em></div>
-                <div className="bx-evidence ok"><b>✓</b><span>Payment and dispute<small>Stripe · read-only</small></span><em>Ready</em></div>
-                <div className="bx-evidence missing"><b>!</b><span>Proof of delivery<small>Required by policy</small></span><em>Missing</em></div>
-                <div className="bx-policy-note"><span>Applicable policy</span><strong>Dispute evidence review · v3</strong><small>Approved by Risk Operations</small></div>
+          <div className="bx-hero-product">
+            <div className="bx-product-shot" aria-label="Payment dispute awaiting human approval">
+              <div className="bx-shot-bar"><span>PAYMENT CASE</span><div><i /> Awaiting approval</div></div>
+              <div className="bx-case-head">
+                <div><small>DISPUTE · PAY-DEMO-0001</small><h2>Order not received</h2><p>Response due Jul 22 · 4 days</p></div>
+                <strong>$600.00 <small>USD</small></strong>
               </div>
-              <div className="bx-proposal">
-                <div className="bx-panel-title">Agent proposal</div>
-                <span className="bx-agent">Agent · disputes-triage-01</span>
-                <h3>Request delivery evidence</h3>
-                <p>Draft a message asking the customer for proof of delivery before the response deadline.</p>
-                <dl><div><dt>Impact</dt><dd>Customer-visible</dd></div><div><dt>Reviewer</dt><dd>Payment Ops</dd></div></dl>
-                <button type="button" onClick={openDemo}>Review exact message <span>→</span></button>
+              <div className="bx-case-grid">
+                <div className="bx-case-main">
+                  <div className="bx-panel-title">Evidence</div>
+                  <div className="bx-evidence ok"><b>✓</b><span>Customer conversation<small>Imported from support</small></span><em>Ready</em></div>
+                  <div className="bx-evidence ok"><b>✓</b><span>Payment and dispute<small>Stripe · read-only</small></span><em>Ready</em></div>
+                  <div className="bx-evidence missing"><b>!</b><span>Proof of delivery<small>Required by policy</small></span><em>Missing</em></div>
+                  <div className="bx-policy-note"><span>Applicable policy</span><strong>Dispute evidence review · v3</strong><small>Approved by Risk Operations</small></div>
+                </div>
+                <div className="bx-proposal">
+                  <div className="bx-panel-title">Agent proposal</div>
+                  <span className="bx-agent">Agent · disputes-triage-01</span>
+                  <h3>Request delivery evidence</h3>
+                  <p>Draft a message asking the customer for proof of delivery before the response deadline.</p>
+                  <dl><div><dt>Impact</dt><dd>Customer-visible</dd></div><div><dt>Reviewer</dt><dd>Payment Ops</dd></div></dl>
+                  <button type="button" onClick={openDemo}>Review exact message <span>→</span></button>
+                </div>
               </div>
+              <div className="bx-shot-foot"><span>API <b>Agent proposes</b></span><span>Dashboard <b>Human decides</b></span></div>
             </div>
-            <div className="bx-shot-foot"><span>API <b>Agent proposes</b></span><span>Dashboard <b>Human decides</b></span></div>
+            <div className="bx-connector-rail" aria-label="Connector preview">
+              <div className="bx-connector-window">
+                <div className="bx-connector-track">
+                  {[...connectorItems, ...connectorItems].map(([name, url], index) => (
+                    <a key={`${name}-${index}`} href={url} target="_blank" rel="noreferrer" aria-label={`Visit ${name}`}>
+                      <ConnectorPlaceholder name={name} />
+                      <span className="bx-connector-name">{name}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+              <button type="button" onClick={() => setConnectorsOpen(true)}><span aria-hidden="true">→</span> View all connectors</button>
+            </div>
           </div>
         </section>
 
@@ -207,7 +322,7 @@ export default function MarketingSite() {
             <span className="bx-kicker">DESIGN PARTNERS + CONTROLLED PILOTS</span>
             <h2>Introduce AI agents without losing operational control.</h2>
             <p>We’re working with fintech and payment-operations teams that want to test governed agent workflows on real cases.</p>
-            <div className="bx-actions"><button type="button" onClick={openDemo}>Request a pilot <Arrow /></button><a href="mailto:hello@bullyx.tech">Talk to the team</a></div>
+            <div className="bx-actions"><button type="button" onClick={openDemo}>Request a pilot <Arrow /></button><a href="mailto:bullyxai@gmail.com">Talk to the team</a></div>
           </Reveal>
         </section>
       </main>
@@ -218,6 +333,7 @@ export default function MarketingSite() {
         <span>© 2026 BULLYX, INC.</span>
       </footer>
       <DemoRequestModal open={demoOpen} onClose={() => setDemoOpen(false)} />
+      <ConnectorModal open={connectorsOpen} onClose={() => setConnectorsOpen(false)} />
     </div>
   )
 }
