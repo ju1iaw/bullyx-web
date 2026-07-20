@@ -180,3 +180,48 @@ export async function uploadAvatar(token, userId, file) {
   if (!response.ok) throw new Error((await response.json().catch(() => null))?.message || 'Could not upload that photo.')
   return `${url}/storage/v1/object/public/avatars/${path}`
 }
+
+export async function askCompanyBrain(token, payload) {
+  return request('/functions/v1/ask', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  }, token)
+}
+
+export async function getConversations(token, organizationId) {
+  return request(`/rest/v1/conversations?organization_id=eq.${organizationId}&select=id,title,created_at,updated_at&order=updated_at.desc&limit=30`, {}, token)
+}
+
+export async function getConversationMessages(token, conversationId) {
+  return request(`/rest/v1/messages?conversation_id=eq.${conversationId}&select=id,role,content,citations,created_at&order=created_at.asc`, {}, token)
+}
+
+export async function getKnowledgeDocuments(token, organizationId) {
+  return request(`/rest/v1/knowledge_documents?organization_id=eq.${organizationId}&select=id,title,kind,source_label,external_url,content,metadata,indexed_at&order=indexed_at.desc&limit=100`, {}, token)
+}
+
+export async function saveAnswerFeedback(token, values) {
+  return request('/rest/v1/answer_feedback', {
+    method: 'POST',
+    headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
+    body: JSON.stringify(values),
+  }, token)
+}
+
+export async function createAgentAssignment(token, values) {
+  const rows = await request('/rest/v1/agent_assignments', {
+    method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify(values),
+  }, token)
+  return rows[0]
+}
+
+export async function getAgentAssignments(token, organizationId) {
+  return request(`/rest/v1/agent_assignments?organization_id=eq.${organizationId}&select=*&order=created_at.desc&limit=50`, {}, token)
+}
+
+export async function createManualDocument(token, values) {
+  const rows = await request('/rest/v1/knowledge_documents', {
+    method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify(values),
+  }, token)
+  return rows[0]
+}

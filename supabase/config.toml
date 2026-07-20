@@ -1,0 +1,4 @@
+project_id = "cbkryjepymmedoburqeg"
+
+[functions.ask]
+verify_jwt = true

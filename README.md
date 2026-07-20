@@ -86,3 +86,16 @@ VITE_SUPABASE_ANON_KEY=your-public-anon-key
 ```
 
 6. Rebuild and deploy `docs/` using the steps above. The anonymous key is designed for browser use; access is enforced by the included database policies. Never put a Supabase service-role key in this site.
+
+## Company Brain / Ask
+
+Run `supabase/migrations/20260719_company_brain.sql` in the Supabase SQL Editor after the base schema. It adds organization-scoped knowledge, conversations, cited messages, answer feedback, and agent assignments.
+
+The Qwen key stays in Supabase Edge Function secrets—never in `frontend/.env` or the built website. Configure the provider's OpenAI-compatible endpoint, then deploy the function:
+
+```bash
+supabase secrets set QWEN_API_KEY=... QWEN_API_BASE_URL=... QWEN_MODEL=qwen-plus
+supabase functions deploy ask
+```
+
+The endpoint and key must come from the same Qwen region and billing plan. Ask uses full-text retrieval immediately; the knowledge schema also reserves vector embeddings for incremental semantic indexing once the embedding model is selected.

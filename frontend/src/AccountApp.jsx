@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from './AuthContext'
 import * as api from './lib/supabase'
+import AskWorkspace, { AgentsWorkspace, KnowledgeWorkspace } from './AskWorkspace'
 import './AccountApp.css'
 
 function navigate(path, replace = false) {
@@ -71,13 +72,14 @@ function Onboarding() {
   return <AuthLayout eyebrow="ONE LAST STEP" title="Tell us who you are." copy="This information helps teammates recognize you when reviewing access and approvals."><form className="acct-form" onSubmit={submit}><Field label="Full name" value={fullName} onChange={(e) => setFullName(e.target.value)} autoComplete="name" required /><Field label="Phone number" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" placeholder="+1 415 555 0123" required /><Field label="Account email" value={user.email} disabled />{error && <p className="acct-error">{error}</p>}<button className="acct-button" disabled={busy}>{busy ? 'Saving…' : 'Continue to dashboard'} <Arrow /></button></form><p className="acct-privacy">Your phone number is visible only to you and authorized organization administrators.</p></AuthLayout>
 }
 
-function Avatar({ profile, user, large = false }) { const initial = profile?.full_name?.[0] || user?.email?.[0] || '?'; return <span className={`acct-avatar ${large ? 'large' : ''}`}>{profile?.avatar_url ? <img src={profile.avatar_url} alt="" /> : initial.toUpperCase()}</span> }
+export function Avatar({ profile, user, large = false }) { const initial = profile?.full_name?.[0] || user?.email?.[0] || '?'; return <span className={`acct-avatar ${large ? 'large' : ''}`}>{profile?.avatar_url ? <img src={profile.avatar_url} alt="" /> : initial.toUpperCase()}</span> }
 
-function AppShell({ title, eyebrow, children }) {
+export function AppShell({ title, eyebrow, children, flush = false }) {
   const { user, profile, signOut } = useAuth()
   const [menu, setMenu] = useState(false)
   async function logout() { await signOut(); navigate('/', true) }
-  return <div className="app-shell"><aside className={menu ? 'open' : ''}><Logo /><nav><button className={title === 'Dashboard' ? 'active' : ''} onClick={() => { navigate('/dashboard'); setMenu(false) }}>Overview</button><button className={title === 'Settings' ? 'active' : ''} onClick={() => { navigate('/settings'); setMenu(false) }}>Settings</button></nav><div className="side-account"><Avatar profile={profile} user={user} /><div><b>{profile?.full_name || 'Your profile'}</b><small>{user.email}</small></div></div><button className="side-signout" onClick={logout}>Sign out</button></aside><main className="app-main"><header><div><p className="acct-eyebrow">{eyebrow}</p><h1>{title}</h1></div><button className="mobile-profile" onClick={() => setMenu(!menu)} aria-label="Toggle account menu"><Avatar profile={profile} user={user} /></button></header>{children}</main></div>
+  const items = [['Ask','/dashboard'],['Knowledge','/knowledge'],['Agents','/agents'],['Organizations','/organizations'],['Settings','/settings']]
+  return <div className="app-shell"><aside className={menu ? 'open' : ''}><Logo /><nav>{items.map(([label,path]) => <button key={label} className={title === label ? 'active' : ''} onClick={() => { navigate(path); setMenu(false) }}>{label}</button>)}</nav><div className="side-account"><Avatar profile={profile} user={user} /><div><b>{profile?.full_name || 'Your profile'}</b><small>{user.email}</small></div></div><button className="side-signout" onClick={logout}>Sign out</button></aside><main className={`app-main ${flush ? 'app-main-flush' : ''}`}><header><div><p className="acct-eyebrow">{eyebrow}</p><h1>{title}</h1></div><button className="mobile-profile" onClick={() => setMenu(!menu)} aria-label="Toggle account menu"><Avatar profile={profile} user={user} /></button></header>{children}</main></div>
 }
 
 function Dashboard() {
@@ -98,7 +100,7 @@ function Dashboard() {
   async function join(event) { event.preventDefault(); setError(''); try { await api.requestToJoin(token, user.id, joinId); setJoinId(''); setMessage('Request sent to the organization owner.'); await load() } catch (err) { setError(err.message) } }
   async function create(event) { event.preventDefault(); setError(''); try { await api.createOrganization(token, user.id, newName.trim()); setNewName(''); setMessage('Organization created. You are its owner.'); await load() } catch (err) { setError(err.message) } }
   async function decide(item, status) { try { await api.decideJoinRequest(token, item, status); setMessage(status === 'approved' ? 'Member approved.' : 'Request declined.'); await load() } catch (err) { setError(err.message) } }
-  return <AppShell title="Dashboard" eyebrow={`GOOD ${new Date().getHours() < 12 ? 'MORNING' : new Date().getHours() < 18 ? 'AFTERNOON' : 'EVENING'}, ${(profile?.full_name || '').split(' ')[0].toUpperCase()}`}><section className="dashboard-intro"><div><h2>Your control center.</h2><p>Manage the teams you belong to and review access requests for organizations you own.</p></div><span className="status-pill"><i /> Account active</span></section>{message && <div className="inline-message">{message}<button onClick={() => setMessage('')} aria-label="Dismiss">×</button></div>}{error && <p className="acct-error">{error}</p>}
+  return <AppShell title="Organizations" eyebrow={`GOOD ${new Date().getHours() < 12 ? 'MORNING' : new Date().getHours() < 18 ? 'AFTERNOON' : 'EVENING'}, ${(profile?.full_name || '').split(' ')[0].toUpperCase()}`}><section className="dashboard-intro"><div><h2>Your control center.</h2><p>Manage the teams you belong to and review access requests for organizations you own.</p></div><span className="status-pill"><i /> Account active</span></section>{message && <div className="inline-message">{message}<button onClick={() => setMessage('')} aria-label="Dismiss">×</button></div>}{error && <p className="acct-error">{error}</p>}
     <div className="dashboard-grid"><section className="dash-card organizations-card"><div className="dash-heading"><div><p className="acct-eyebrow">YOUR WORKSPACES</p><h3>Organizations</h3></div><span>{memberships.length}</span></div>{memberships.length ? <div className="org-list">{memberships.map((item) => <article key={item.id}><div className="org-mark">{item.organization.name[0]}</div><div><b>{item.organization.name}</b><small>{item.role === 'owner' ? 'Owner' : 'Member'} · joined {new Date(item.created_at).toLocaleDateString()}</small></div><em>{item.role}</em></article>)}</div> : <div className="empty-state"><span>01</span><h4>No organization yet</h4><p>Join an existing team or create a new Bullyx workspace below.</p></div>}</section>
       <section className="dash-card notifications-card"><div className="dash-heading"><div><p className="acct-eyebrow">ORGANIZATION NOTIFICATIONS</p><h3>Requests to review</h3></div><span>{incoming.length}</span></div>{incoming.length ? <div className="request-list">{incoming.map((item) => <article key={item.id}><Avatar profile={item.profile} user={{ email: item.profile?.email }} /><div><b>{item.profile?.full_name || item.profile?.email}</b><small>wants to join {item.organization.name}</small></div><div><button onClick={() => decide(item, 'rejected')}>Decline</button><button className="approve" onClick={() => decide(item, 'approved')}>Approve</button></div></article>)}</div> : <div className="empty-state compact"><span>✓</span><h4>You’re all caught up</h4><p>New membership requests will appear here.</p></div>}</section>
     </div>
@@ -126,5 +128,8 @@ export default function AccountApp({ path }) {
   if (path === '/login') return <Login />
   if (path === '/onboarding') return <Protected><Onboarding /></Protected>
   if (path === '/settings') return <Protected><Settings /></Protected>
-  return <Protected><Dashboard /></Protected>
+  if (path === '/organizations') return <Protected><Dashboard /></Protected>
+  if (path === '/knowledge') return <Protected><KnowledgeWorkspace /></Protected>
+  if (path === '/agents') return <Protected><AgentsWorkspace /></Protected>
+  return <Protected><AskWorkspace /></Protected>
 }
