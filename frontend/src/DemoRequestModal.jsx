@@ -2,22 +2,55 @@ import { useEffect, useId, useState } from 'react'
 
 const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID
 
-export default function DemoRequestModal({ open, onClose }) {
+const copy = {
+  demo: {
+    kicker: 'REQUEST A DEMO',
+    title: 'Explore a controlled payment-operations pilot.',
+    lead: 'Tell us about your payment workflows, the agents you are introducing, and where human review matters most.',
+    submit: 'Request demo',
+    successKicker: 'REQUEST RECEIVED',
+    successTitle: 'Thanks — we’ll be in touch.',
+    successBody: 'We got your demo request and will follow up at the email you provided.',
+    subject: (form) => `Bullyx demo request — ${form.company || form.name}`,
+    messageLabel: 'Why are you interested in Bullyx?',
+    messagePlaceholder: 'Payment cases, agents, approval requirements…',
+    requireMessage: false,
+  },
+  waitlist: {
+    kicker: 'JOIN THE WAITLIST',
+    title: 'Get early access for your payment team.',
+    lead: 'Join the waitlist for fintech and payment-operations teams. We’ll reach out as design-partner and pilot spots open.',
+    submit: 'Join waitlist',
+    successKicker: 'YOU’RE ON THE LIST',
+    successTitle: 'You’re on the waitlist.',
+    successBody: 'Thanks for joining. We’ll email you when a spot opens for your team.',
+    subject: (form) => `Bullyx waitlist — ${form.company || form.name}`,
+    messageLabel: 'Anything we should know? (optional)',
+    messagePlaceholder: 'Team size, payment stack, agents you’re evaluating…',
+    requireMessage: false,
+  },
+}
+
+const emptyForm = {
+  name: '',
+  email: '',
+  company: '',
+  role: '',
+  message: '',
+}
+
+export default function DemoRequestModal({ open, onClose, intent = 'demo' }) {
   const titleId = useId()
+  const content = copy[intent] || copy.demo
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    company: '',
-    role: '',
-    message: '',
-  })
+  const [form, setForm] = useState(emptyForm)
 
   useEffect(() => {
     if (!open) return undefined
     setStatus('idle')
     setError('')
+    setForm(emptyForm)
     const onKey = (event) => {
       if (event.key === 'Escape') onClose()
     }
@@ -27,7 +60,7 @@ export default function DemoRequestModal({ open, onClose }) {
       window.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-  }, [open, onClose])
+  }, [open, onClose, intent])
 
   if (!open) return null
 
@@ -39,7 +72,7 @@ export default function DemoRequestModal({ open, onClose }) {
     event.preventDefault()
     if (!FORMSPREE_ID || FORMSPREE_ID === 'your_form_id_here') {
       setStatus('error')
-      setError('Demo requests are not connected yet. Add your Formspree form ID to enable this form.')
+      setError('This form is not connected yet. Add your Formspree form ID to enable it.')
       return
     }
 
@@ -54,12 +87,13 @@ export default function DemoRequestModal({ open, onClose }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          form_type: intent,
           name: form.name,
           email: form.email,
           company: form.company,
           role: form.role,
           message: form.message,
-          _subject: `Bullyx demo request — ${form.company || form.name}`,
+          _subject: content.subject(form),
         }),
       })
 
@@ -69,7 +103,7 @@ export default function DemoRequestModal({ open, onClose }) {
       }
 
       setStatus('success')
-      setForm({ name: '', email: '', company: '', role: '', message: '' })
+      setForm(emptyForm)
     } catch (err) {
       setStatus('error')
       setError(err.message || 'Something went wrong. Please try again.')
@@ -91,20 +125,18 @@ export default function DemoRequestModal({ open, onClose }) {
 
         {status === 'success' ? (
           <div className="bx-modal-success">
-            <span className="bx-number">REQUEST RECEIVED</span>
-            <h2 id={titleId}>Thanks — we’ll be in touch.</h2>
-            <p>We got your demo request and will follow up at the email you provided.</p>
+            <span className="bx-number">{content.successKicker}</span>
+            <h2 id={titleId}>{content.successTitle}</h2>
+            <p>{content.successBody}</p>
             <button className="bx-primary" type="button" onClick={onClose}>
               Back to site <span aria-hidden="true">↗</span>
             </button>
           </div>
         ) : (
           <>
-            <span className="bx-number">REQUEST A DEMO</span>
-            <h2 id={titleId}>Explore a controlled payment-operations pilot.</h2>
-            <p className="bx-modal-lead">
-              Tell us about your payment workflows, the agents you are introducing, and where human review matters most.
-            </p>
+            <span className="bx-number">{content.kicker}</span>
+            <h2 id={titleId}>{content.title}</h2>
+            <p className="bx-modal-lead">{content.lead}</p>
             <form className="bx-demo-form" onSubmit={handleSubmit}>
               <label>
                 Name
@@ -136,18 +168,19 @@ export default function DemoRequestModal({ open, onClose }) {
                 <input name="role" autoComplete="organization-title" value={form.role} onChange={update('role')} />
               </label>
               <label className="bx-demo-form__full">
-                Why are you interested in Bullyx?
+                {content.messageLabel}
                 <textarea
                   name="message"
-                  rows={4}
+                  rows={intent === 'waitlist' ? 3 : 4}
                   value={form.message}
                   onChange={update('message')}
-                placeholder="Payment cases, agents, approval requirements…"
+                  placeholder={content.messagePlaceholder}
+                  required={content.requireMessage}
                 />
               </label>
               {status === 'error' && <p className="bx-form-error" role="alert">{error}</p>}
               <button className="bx-primary" type="submit" disabled={status === 'submitting'}>
-                {status === 'submitting' ? 'Sending…' : 'Request demo'}
+                {status === 'submitting' ? 'Sending…' : content.submit}
                 <span aria-hidden="true">↗</span>
               </button>
             </form>

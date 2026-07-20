@@ -14,9 +14,11 @@ npm run dev
 
 Open [http://127.0.0.1:5173](http://127.0.0.1:5173).
 
-## Demo request form (Formspree)
+## Lead forms (Formspree)
 
-Submissions are stored in [Formspree](https://formspree.io) (inbox + email notifications). You need a free Formspree account and form ID before the live form works.
+**Request a demo** and **Join waitlist** both submit to the same Formspree form. Each submission includes a `form_type` field (`demo` or `waitlist`) so you can filter them in the Formspree inbox.
+
+Submissions are stored in [Formspree](https://formspree.io) (inbox + email notifications). You need a free Formspree account and form ID before the live forms work.
 
 ### One-time setup
 

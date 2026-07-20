@@ -206,13 +206,14 @@ function UseCaseVisual({ index }) {
 export default function MarketingSite() {
   const { user, profile } = useAuth()
   const [menu, setMenu] = useState(false)
-  const [demoOpen, setDemoOpen] = useState(false)
+  const [leadIntent, setLeadIntent] = useState(null)
   const [connectorsOpen, setConnectorsOpen] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
   const [activeUseCase, setActiveUseCase] = useState(0)
 
   function closeMenu() { setMenu(false) }
-  function openDemo() { closeMenu(); setDemoOpen(true) }
+  function openDemo() { closeMenu(); setLeadIntent('demo') }
+  function openWaitlist() { closeMenu(); setLeadIntent('waitlist') }
 
   return (
     <div className="bx-site">
@@ -227,7 +228,7 @@ export default function MarketingSite() {
         </nav>
         <div className="bx-nav-actions">
           {user ? <a className="bx-profile-link" href="/dashboard" aria-label="Open your dashboard">{profile?.avatar_url ? <img src={profile.avatar_url} alt="" /> : <span>{profile?.full_name?.[0] || user.email?.[0] || ''}</span>}</a> : <a className="bx-signin" href="/login">Sign in</a>}
-          <button className="bx-nav-cta" type="button" onClick={openDemo}>Request a demo <Arrow /></button>
+          <button className="bx-nav-cta" type="button" onClick={openWaitlist}>Join waitlist <Arrow /></button>
         </div>
         <button className="bx-menu" type="button" onClick={() => setMenu(!menu)} aria-expanded={menu} aria-label="Toggle menu"><span/><span/></button>
       </header>
@@ -239,7 +240,8 @@ export default function MarketingSite() {
             <h1>Let AI agents help with payment operations—<em>without giving up control.</em></h1>
             <p>Bullyx gives every agent a controlled identity, applies your approved policies, routes sensitive actions to people, and records what happened.</p>
             <div className="bx-actions">
-              <button className="bx-primary" type="button" onClick={openDemo}>Request a demo <Arrow /></button>
+              <button className="bx-primary" type="button" onClick={openWaitlist}>Join waitlist <Arrow /></button>
+              <button className="bx-secondary" type="button" onClick={openDemo}>Request a demo</button>
               <a className="bx-secondary" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
             </div>
             <p className="bx-roles">For payment operations, risk, compliance, and engineering teams introducing agents.</p>
@@ -421,10 +423,14 @@ export default function MarketingSite() {
 
         <section className="bx-final">
           <Reveal>
-            <span className="bx-kicker">DESIGN PARTNERS + CONTROLLED PILOTS</span>
+            <span className="bx-kicker">JOIN THE WAITLIST</span>
             <h2>Introduce AI agents without losing operational control.</h2>
-            <p>We’re working with fintech and payment-operations teams that want to test governed agent workflows on real cases.</p>
-            <div className="bx-actions"><button type="button" onClick={openDemo}>Request a pilot <Arrow /></button><a href="mailto:bullyxai@gmail.com">Talk to the team</a></div>
+            <p>We’re working with fintech and payment-operations teams that want to test governed agent workflows on real cases. Join the waitlist for early access, or request a pilot conversation.</p>
+            <div className="bx-actions">
+              <button type="button" onClick={openWaitlist}>Join waitlist <Arrow /></button>
+              <button className="bx-final-secondary" type="button" onClick={openDemo}>Request a pilot</button>
+              <a href="mailto:bullyxai@gmail.com">Talk to the team</a>
+            </div>
           </Reveal>
         </section>
       </main>
@@ -434,7 +440,7 @@ export default function MarketingSite() {
         <p>Governed agent workflows for fintech payment operations.</p>
         <span>© 2026 BULLYX, INC.</span>
       </footer>
-      <DemoRequestModal open={demoOpen} onClose={() => setDemoOpen(false)} />
+      <DemoRequestModal open={Boolean(leadIntent)} intent={leadIntent || 'demo'} onClose={() => setLeadIntent(null)} />
       <ConnectorModal open={connectorsOpen} onClose={() => setConnectorsOpen(false)} />
     </div>
   )
