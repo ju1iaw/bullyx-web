@@ -5,8 +5,8 @@ const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID
 const copy = {
   demo: {
     kicker: 'REQUEST A DEMO',
-    title: 'Explore a controlled payment-operations pilot.',
-    lead: 'Tell us about your payment workflows, the agents you are introducing, and where human review matters most.',
+    title: 'Explore a company-brain pilot.',
+    lead: 'Tell us where your company knowledge lives, what your team needs to ask, and which agents need access to that context.',
     submit: 'Request demo',
     successKicker: 'REQUEST RECEIVED',
     successTitle: 'Thanks — we’ll be in touch.',
@@ -18,15 +18,15 @@ const copy = {
   },
   waitlist: {
     kicker: 'JOIN THE WAITLIST',
-    title: 'Get early access for your payment team.',
-    lead: 'Join the waitlist for fintech and payment-operations teams. We’ll reach out as design-partner and pilot spots open.',
+    title: 'Get early access for your team.',
+    lead: 'Join the waitlist for teams that want answers and agent instructions grounded in their company knowledge.',
     submit: 'Join waitlist',
     successKicker: 'YOU’RE ON THE LIST',
     successTitle: 'You’re on the waitlist.',
     successBody: 'Thanks for joining. We’ll email you when a spot opens for your team.',
     subject: (form) => `Bullyx waitlist — ${form.company || form.name}`,
     messageLabel: 'Anything we should know? (optional)',
-    messagePlaceholder: 'Team size, payment stack, agents you’re evaluating…',
+    messagePlaceholder: 'Team size, company systems, questions you need answered, agents you’re evaluating…',
     requireMessage: false,
   },
 }
