@@ -5,6 +5,10 @@ import './MarketingSite.css'
 
 const Arrow = () => <span aria-hidden="true">↗</span>
 
+function BrainOrbit() {
+  return <div className="bx-brain-orbit" aria-hidden="true"><div className="bx-brain-glow" /><div className="bx-brain-core"><span>BX</span><i /><i /><i /><i /><i /></div><div className="bx-orbit bx-orbit-one"><b /></div><div className="bx-orbit bx-orbit-two"><b /></div><div className="bx-orbit bx-orbit-three"><b /></div><span className="bx-brain-label bx-label-left">COMPANY CONTEXT</span><span className="bx-brain-label bx-label-right">GOVERNED AGENTS</span></div>
+}
+
 function Reveal({ children, className = '' }) {
   const ref = useRef(null)
   useEffect(() => {
@@ -20,11 +24,11 @@ function Reveal({ children, className = '' }) {
 }
 
 const steps = [
-  ['01', 'Connect company systems', 'Bring payment data, support conversations, documents, and internal knowledge into a permission-aware workspace.'],
-  ['02', 'Register each agent', 'Give each agent a stable identity, owner, status, credential, and narrowly scoped API permissions.'],
-  ['03', 'Apply approved policies', 'Evaluate proposals against structured, human-approved rules. Model output is never treated as permission.'],
-  ['04', 'Review sensitive actions', 'Show a reviewer the exact proposal, evidence, policy, requester, impact, and required approval.'],
-  ['05', 'Execute and record', 'Run only an explicitly implemented capability, then preserve the decision and provider result in a tamper-evident history.'],
+  ['01', 'Connect company systems', 'Bring email, documents, conversations, operational tools, and internal knowledge together through secure APIs.'],
+  ['02', 'Ask a company question', 'Bullyx searches the information you can access and returns an answer grounded in your company data.'],
+  ['03', 'Inspect the evidence', 'See the important source documents behind an answer and open an email, policy, or record directly in the side panel.'],
+  ['04', 'Assign work to an agent', 'Turn an answer into a clear assignment with the relevant evidence, company practices, and case-specific context attached.'],
+  ['05', 'Give agents the same context', 'Agents access the company brain through an API so their work follows how your company actually operates.'],
 ]
 
 const capabilities = [
@@ -219,7 +223,7 @@ export default function MarketingSite() {
     <div className="bx-site">
       <header className="bx-nav">
         <a className="bx-logo" href="#top" aria-label="Bullyx home" onClick={closeMenu}>
-          <img src="/bullyx-logo-light.png" alt="Bullyx" width="140" height="105" />
+          <img src="/bullyx-logo-new.png" alt="Bullyx" width="140" height="105" />
         </a>
         <nav className={menu ? 'open' : ''} aria-label="Main navigation">
           <a href="#product" onClick={closeMenu}>Overview</a>
@@ -236,18 +240,19 @@ export default function MarketingSite() {
       <main id="top">
         <section className="bx-hero">
           <div className="bx-hero-copy">
-            <div className="bx-eyebrow"><span /> Built for fintech payment operations</div>
-            <h1>Let AI agents help with payment operations—<em>without giving up control.</em></h1>
-            <p>Bullyx gives every agent a controlled identity, applies your approved policies, routes sensitive actions to people, and records what happened.</p>
+            <div className="bx-eyebrow"><span /> Your company brain for people and agents</div>
+            <h1>Ask your company anything.<br/><em>Get answers with evidence.</em></h1>
+            <p>Bullyx searches across your company data through connected APIs, answers questions with the most important source documents, and gives AI agents instructions grounded in how your company works.</p>
             <div className="bx-actions">
               <button className="bx-primary" type="button" onClick={openWaitlist}>Join waitlist <Arrow /></button>
               <button className="bx-secondary" type="button" onClick={openDemo}>Request a demo</button>
               <a className="bx-secondary" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
             </div>
-            <p className="bx-roles">For payment operations, risk, compliance, and engineering teams introducing agents.</p>
+            <p className="bx-roles">One shared source of company context for your team and every agent you deploy.</p>
           </div>
 
           <div className="bx-hero-product">
+            <BrainOrbit />
             <div className="bx-product-shot" aria-label="Payment dispute awaiting human approval">
               <div className="bx-shot-bar"><span>PAYMENT CASE</span><div><i /> Awaiting approval</div></div>
               <div className="bx-case-head">
@@ -293,8 +298,8 @@ export default function MarketingSite() {
           <Reveal className="bx-overview-grid">
             <article>
               <span className="bx-kicker">WHAT’S THE PROBLEM?</span>
-              <h2>Payment work is spread across too many systems.</h2>
-              <p>Payment teams investigate disputes, refunds, and customer issues across <strong>payment processors, support systems, email, documents, communication tools, fraud systems, and internal dashboards</strong>. As companies introduce AI agents into this work, they need a dependable means of <strong>limiting what each agent may access</strong>, establishing which approved procedures govern its recommendations, determining when a person must review a proposal, and preventing unsupported actions from reaching customers or providers.</p>
+              <h2>Your company knowledge is scattered across too many systems.</h2>
+              <p>The answer to an important question may be buried in <strong>email, documents, support conversations, communication tools, operational systems, and internal dashboards</strong>. People lose time searching and AI agents miss the context that explains what happened, how work is usually done, and which source proves it.</p>
               <div className="bx-fragmented-visual" aria-label="A payment case spread across company systems">
                 <div className="bx-fragmented-case"><small>PAYMENT CASE</small><strong>Order not received</strong><span>$600 dispute</span></div>
                 <div className="bx-fragmented-systems">
@@ -320,8 +325,8 @@ export default function MarketingSite() {
             </article>
             <article>
               <span className="bx-kicker">OUR SOLUTION</span>
-              <h2>A control layer between proposal and action.</h2>
-              <p>Bullyx connects permitted operational information, organizes payment cases and evidence, and gives each external agent a <strong>stable identity with narrowly scoped API access</strong>. Proposed actions are evaluated against <strong>structured policies that authorized people have approved</strong>. Sensitive proposals are routed to designated reviewers, <strong>only explicitly implemented capabilities may execute</strong>, and the complete sequence of evidence, policy decisions, approvals, execution attempts, and provider results is preserved in a tamper-evident history.</p>
+              <h2>One company brain, with every answer linked to evidence.</h2>
+              <p>Ask Bullyx a question and it searches the company information you are allowed to access through connected APIs. It returns a clear answer, surfaces the <strong>most important supporting documents</strong>, and lets you open a source—such as a decisive email—directly beside the answer. Assign the work to an agent and Bullyx supplies <strong>specific instructions based on company practice and the context of that exact task</strong>.</p>
               <div className="bx-control-visual" aria-label="Bullyx control flow from agent proposal to governed execution">
                 <div className="bx-control-node"><small>EXTERNAL AGENT</small><strong>Proposes an action</strong><span>Scoped API identity</span></div>
                 <i className="bx-control-arrow">↓</i>
@@ -352,8 +357,8 @@ export default function MarketingSite() {
         <section className="bx-workflow" id="how-it-works">
           <Reveal className="bx-section-intro light">
             <span className="bx-kicker">HOW BULLYX WORKS</span>
-            <h2>Agents use the API.<br/>People use the dashboard.</h2>
-            <p>Bullyx sits between an agent’s proposal and a customer-impacting operation. It brings the context together, checks authority, and keeps people in the decision path.</p>
+            <h2>People ask in the dashboard.<br/>Agents use the API.</h2>
+            <p>Both work from the same permission-aware company knowledge. People get cited answers and open the evidence beside them; agents receive precise instructions shaped by company practices and task-specific context.</p>
           </Reveal>
           <Reveal className="bx-workflow-layout">
             <div className="bx-step-list">
@@ -424,8 +429,8 @@ export default function MarketingSite() {
         <section className="bx-final">
           <Reveal>
             <span className="bx-kicker">JOIN THE WAITLIST</span>
-            <h2>Introduce AI agents without losing operational control.</h2>
-            <p>We’re working with fintech and payment-operations teams that want to test governed agent workflows on real cases. Join the waitlist for early access, or request a pilot conversation.</p>
+            <h2>Give every person and agent the context to do the work right.</h2>
+            <p>Connect your company systems, ask questions across all of your knowledge, inspect the source documents behind each answer, and assign evidence-backed work to agents.</p>
             <div className="bx-actions">
               <button type="button" onClick={openWaitlist}>Join waitlist <Arrow /></button>
               <button className="bx-final-secondary" type="button" onClick={openDemo}>Request a pilot</button>
@@ -436,8 +441,8 @@ export default function MarketingSite() {
       </main>
 
       <footer>
-        <a className="bx-logo" href="#top" aria-label="Bullyx home"><img src="/bullyx-logo-light.png" alt="Bullyx" width="120" height="90" /></a>
-        <p>Governed agent workflows for fintech payment operations.</p>
+        <a className="bx-logo" href="#top" aria-label="Bullyx home"><img src="/bullyx-logo-new.png" alt="Bullyx" width="120" height="90" /></a>
+        <p>The company brain for people and AI agents.</p>
         <span>© 2026 BULLYX, INC.</span>
       </footer>
       <DemoRequestModal open={Boolean(leadIntent)} intent={leadIntent || 'demo'} onClose={() => setLeadIntent(null)} />
