@@ -1,8 +1,8 @@
 # Bullyx website
 
-Marketing site for [bullyx.tech](https://bullyx.tech).
+Marketing site and early-access product surfaces for [bullyx.tech](https://bullyx.tech).
 
-This repo is **website-only**. The product/demo lives in a separate repository.
+The public site, account experience, organization setup, and lightweight Ask/knowledge/agent-assignment surfaces live here. The full robotics product and synthetic Aegis Robotics demonstration live in the separate product repository.
 
 ## Local development
 
@@ -62,6 +62,7 @@ npm run build
 rm -rf ../docs/*
 cp -R dist/* ../docs/
 touch ../docs/.nojekyll
+cp ../docs/index.html ../docs/404.html
 # keep the custom domain file
 cp public/CNAME ../docs/CNAME 2>/dev/null || cp ../CNAME ../docs/CNAME
 ```

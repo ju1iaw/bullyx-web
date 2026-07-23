@@ -32,6 +32,8 @@
 .bx-connector-track>a:hover>.bx-connector-name,.bx-connector-track>a:focus-visible>.bx-connector-name{opacity:1;transform:none}
 .bx-connector-placeholder{display:grid;place-items:center;width:48px;height:48px;flex:0 0 48px;padding:4px;background:transparent;border:0;box-shadow:none}
 .bx-connector-placeholder img{display:block;width:100%;height:100%;object-fit:contain}
+.bx-connector-fallback{border:1px solid rgba(250,200,195,.5);border-radius:50%;background:rgba(250,200,195,.08);color:var(--purple)}
+.bx-connector-fallback b{font-size:10px;letter-spacing:.08em}
 .bx-connector-rail>button{align-self:stretch;border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;padding:0 16px;display:flex;align-items:center;gap:10px;font-size:10px;font-weight:600;white-space:nowrap;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .bx-connector-rail>button span{color:var(--purple);font-size:16px}
 .bx-connector-rail>button:hover{background:var(--purple);border-color:var(--purple);color:var(--deep)}
@@ -91,6 +93,7 @@
 .bx-fragmented-systems b{grid-row:3;align-self:end;font-size:10px;font-weight:500}
 .bx-fragmented-logos{grid-column:1;grid-row:2;align-self:end;justify-self:start;display:flex;align-items:center;gap:7px}
 .bx-fragmented-logos img{display:block;width:25px;height:25px;object-fit:contain}
+.bx-fragmented-logos em{font-style:normal;color:#8ba098;font-size:7px;letter-spacing:.08em}
 .bx-fragmented-visual>p{display:flex;justify-content:space-between;margin-top:14px!important;color:#cbd9d3!important;font-size:8px!important;font-weight:500;letter-spacing:.04em}
 
 .bx-control-visual{display:flex;flex-direction:column;align-items:stretch}

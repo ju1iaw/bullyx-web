@@ -18,7 +18,7 @@ function Field({ label, hint, ...props }) {
 }
 
 function AuthLayout({ children, eyebrow, title, copy }) {
-  return <div className="auth-page"><section className="auth-brand"><Logo /><div><p className="acct-eyebrow">CONTROLLED OPERATIONS</p><h1>Trust starts with knowing <em>who is in control.</em></h1><p>Bullyx gives teams a secure home for agent identities, policy approvals, and payment operations.</p></div><small>Every consequential action stays attributable.</small></section><main className="auth-panel"><div className="auth-card"><p className="acct-eyebrow">{eyebrow}</p><h2>{title}</h2><p className="auth-copy">{copy}</p>{children}</div></main></div>
+  return <div className="auth-page"><section className="auth-brand"><Logo /><div><p className="acct-eyebrow">ROBOTICS OPERATIONAL INTELLIGENCE</p><h1>Trust starts with the <em>full history behind it.</em></h1><p>Bullyx gives robotics teams a governed home for operational evidence, incident decisions, and the agents helping them investigate.</p></div><small>Every consequential decision stays attributable.</small></section><main className="auth-panel"><div className="auth-card"><p className="acct-eyebrow">{eyebrow}</p><h2>{title}</h2><p className="auth-copy">{copy}</p>{children}</div></main></div>
 }
 
 function ConfigurationNotice() {
