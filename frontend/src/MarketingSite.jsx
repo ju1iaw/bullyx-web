@@ -6,7 +6,7 @@ import './MarketingSite.css'
 const Arrow = () => <span aria-hidden="true">↗</span>
 
 function BrainOrbit() {
-  return <div className="bx-brain-orbit" aria-hidden="true"><div className="bx-brain-glow" /><div className="bx-brain-core"><span>BX</span><i /><i /><i /><i /><i /></div><div className="bx-orbit bx-orbit-one"><b /></div><div className="bx-orbit bx-orbit-two"><b /></div><div className="bx-orbit bx-orbit-three"><b /></div><span className="bx-brain-label bx-label-left">COMPANY CONTEXT</span><span className="bx-brain-label bx-label-right">GOVERNED AGENTS</span></div>
+  return <div className="bx-brain-orbit" aria-hidden="true"><div className="bx-brain-glow" /><div className="bx-brain-core"><span>BX</span><i /><i /><i /><i /><i /></div><div className="bx-orbit bx-orbit-one"><b /></div><div className="bx-orbit bx-orbit-two"><b /></div><div className="bx-orbit bx-orbit-three"><b /></div><span className="bx-brain-particle p1" /><span className="bx-brain-particle p2" /><span className="bx-brain-particle p3" /><span className="bx-brain-particle p4" /><span className="bx-brain-particle p5" /><span className="bx-brain-particle p6" /><span className="bx-brain-particle p7" /><span className="bx-brain-particle p8" /><span className="bx-brain-label bx-label-left">COMPANY CONTEXT</span><span className="bx-brain-label bx-label-right">GOVERNED AGENTS</span></div>
 }
 
 function Reveal({ children, className = '' }) {
