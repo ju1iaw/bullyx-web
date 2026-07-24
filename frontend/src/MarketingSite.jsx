@@ -24,20 +24,20 @@ function Reveal({ children, className = '' }) {
 }
 
 const steps = [
-  ['01', 'Connect company systems', 'Bring email, documents, conversations, operational tools, and internal knowledge together through secure APIs.'],
-  ['02', 'Ask a company question', 'Bullyx searches the information you can access and returns an answer grounded in your company data.'],
-  ['03', 'Inspect the evidence', 'See the important source documents behind an answer and open an email, policy, or record directly in the side panel.'],
-  ['04', 'Assign work to an agent', 'Turn an answer into a clear assignment with the relevant evidence, company practices, and case-specific context attached.'],
-  ['05', 'Give agents the same context', 'Agents access the company brain through an API so their work follows how your company actually operates.'],
+  ['01', 'Connect operational systems', 'Bring fleet events, telemetry manifests, maintenance records, engineering activity, customer context, and company knowledge together.'],
+  ['02', 'Reconstruct the robot state', 'Bullyx assembles the permission-visible hardware, software, configuration, mission, maintenance, and evidence history for an exact moment.'],
+  ['03', 'Inspect cited evidence', 'Open the Slack thread, maintenance event, test result, or telemetry reference supporting each conclusion—and see what is missing or conflicting.'],
+  ['04', 'Assign bounded agent work', 'Give an agent a sealed context pack, a limited assignment, explicit stop conditions, and a human handoff.'],
+  ['05', 'Authorize return to service', 'People review the exact evidence packet, policy, test digest, and target robot state before recording an accountable decision.'],
 ]
 
 const capabilities = [
-  ['Payment case workspace', 'See the customer, payment, dispute, evidence, deadline, communications, owner, and timeline together.'],
-  ['Policy management', 'Turn procedures into reviewed, versioned policies. An authorized person—not a model—activates every rule.'],
+  ['Incident workspace', 'See the robot, deployment, incident timeline, configuration, telemetry references, maintenance, tests, customer impact, and owner together.'],
+  ['Safety policy management', 'Turn robotics procedures into reviewed, versioned policies. An authorized person—not a model—activates every rule.'],
   ['Agent management', 'Register agents, issue scoped credentials, assign owners, restrict access, revoke credentials, or disable an agent.'],
   ['Action approvals', 'Approve or reject the exact action proposed, with separation of duties when the requester cannot self-approve.'],
-  ['Connections', 'Import from payment, support, communication, document, and engineering systems without automatically enabling writes.'],
-  ['Search and Ask', 'Humans can search permitted information or create cited summaries. Neither tool grants execution authority.'],
+  ['Connections', 'Connect fleet, telemetry, maintenance, engineering, customer, communication, and document systems without automatically enabling writes.'],
+  ['Search and Ask', 'Humans can reconstruct incidents and ask cited operational questions. Neither tool grants robot-control authority.'],
   ['Audit history', 'Trace evidence, policy decisions, approvals, execution attempts, and provider results through append-only records.'],
   ['Shadow mode', 'Compare agent recommendations with actual human decisions before enabling consequential workflows.'],
 ]
@@ -57,19 +57,19 @@ const showExtendedSections = false
 
 const useCases = [
   {
-    label: 'Dispute evidence',
-    title: '$600 order-not-received dispute',
-    body: <>Bullyx assembles the <strong>payment and dispute data, response deadline, customer conversations, delivery evidence, applicable policy, and missing information</strong>. An agent can propose the next step, but the <strong>designated payment-operations reviewer approves or rejects the exact proposal</strong>.</>,
+    label: 'Incident evidence',
+    title: 'RBT-017 watchdog stop',
+    body: <>Bullyx assembles the <strong>robot identity, deployment, configuration, telemetry references, maintenance history, applicable safety policy, and missing evidence</strong>. An agent can prepare the next step, but the <strong>designated operations or safety reviewer records the return-to-service decision</strong>.</>,
   },
   {
-    label: 'Customer communication',
-    title: 'Review an exact customer message',
-    body: <>An agent prepares a customer-visible draft using permitted case evidence. The reviewer sees the <strong>recipients, subject, message, attachments, policy authority, and case context</strong> before anything can be sent.</>,
+    label: 'Field-service coordination',
+    title: 'Review an exact evidence request',
+    body: <>An agent prepares a request for a missing MCAP interval or maintenance record using permitted incident evidence. The reviewer sees the <strong>target, request, policy authority, and robot context</strong> before it is sent.</>,
   },
   {
-    label: 'Shadow mode',
-    title: 'Compare recommendations before execution',
-    body: <>Teams can compare an agent’s policy-bound recommendation with the actual human outcome. <strong>Shadow recommendations grant no authority</strong> and cannot invoke the action executor.</>,
+    label: 'Return to service',
+    title: 'Separate evidence from authority',
+    body: <>Teams can compare an agent’s evidence-linked recommendation with the independent reviewer’s actual decision. <strong>A repair or passing test never grants authority by itself</strong>.</>,
   },
 ]
 
@@ -240,40 +240,40 @@ export default function MarketingSite() {
       <main id="top">
         <section className="bx-hero">
           <div className="bx-hero-copy">
-            <div className="bx-eyebrow"><span /> Your company brain for people and agents</div>
-            <h1>Ask your company anything.<br/><em>Get answers with evidence.</em></h1>
-            <p>Bullyx searches across your company data through connected APIs, answers questions with the most important source documents, and gives AI agents instructions grounded in how your company works.</p>
+            <div className="bx-eyebrow"><span /> Operational intelligence for robotics companies</div>
+            <h1>Operate every robot with<br/><em>the full history behind it.</em></h1>
+            <p>Bullyx connects fleet, engineering, telemetry, maintenance, customer, and company knowledge so people and agents can investigate failures, coordinate recovery, and make evidence-backed deployment decisions.</p>
             <div className="bx-actions">
               <button className="bx-primary" type="button" onClick={openWaitlist}>Join waitlist <Arrow /></button>
               <button className="bx-secondary" type="button" onClick={openDemo}>Request a demo</button>
               <a className="bx-secondary" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
             </div>
-            <p className="bx-roles">One shared source of company context for your team and every agent you deploy.</p>
+            <p className="bx-roles">A governed company brain for physical robots—and the agents helping operate them.</p>
           </div>
 
           <div className="bx-hero-product">
             <BrainOrbit />
-            <div className="bx-product-shot" aria-label="Payment dispute awaiting human approval">
-              <div className="bx-shot-bar"><span>PAYMENT CASE</span><div><i /> Awaiting approval</div></div>
+            <div className="bx-product-shot" aria-label="Robot incident awaiting return-to-service review">
+              <div className="bx-shot-bar"><span>ROBOT INCIDENT</span><div><i /> Awaiting review</div></div>
               <div className="bx-case-head">
-                <div><small>DISPUTE · PAY-DEMO-0001</small><h2>Order not received</h2><p>Response due Jul 22 · 4 days</p></div>
-                <strong>$600.00 <small>USD</small></strong>
+                <div><small>INCIDENT · INC-204</small><h2>RBT-017 watchdog stop</h2><p>Robot quarantined · review required</p></div>
+                <strong>RBT-017 <small>Fleet 04</small></strong>
               </div>
               <div className="bx-case-grid">
                 <div className="bx-case-main">
                   <div className="bx-panel-title">Evidence</div>
-                  <div className="bx-evidence ok"><b>✓</b><span>Customer conversation<small>Imported from support</small></span><em>Ready</em></div>
-                  <div className="bx-evidence ok"><b>✓</b><span>Payment and dispute<small>Stripe · read-only</small></span><em>Ready</em></div>
-                  <div className="bx-evidence missing"><b>!</b><span>Proof of delivery<small>Required by policy</small></span><em>Missing</em></div>
-                  <div className="bx-policy-note"><span>Applicable policy</span><strong>Dispute evidence review · v3</strong><small>Approved by Risk Operations</small></div>
+                  <div className="bx-evidence ok"><b>✓</b><span>Deployment configuration<small>Fleet manifest · read-only</small></span><em>Ready</em></div>
+                  <div className="bx-evidence ok"><b>✓</b><span>Maintenance and test history<small>Service records</small></span><em>Ready</em></div>
+                  <div className="bx-evidence missing"><b>!</b><span>MCAP interval and time sync<small>Required by policy</small></span><em>Missing</em></div>
+                  <div className="bx-policy-note"><span>Applicable policy</span><strong>Return-to-service review · v3</strong><small>Approved by Safety Operations</small></div>
                 </div>
                 <div className="bx-proposal">
                   <div className="bx-panel-title">Agent proposal</div>
-                  <span className="bx-agent">Agent · disputes-triage-01</span>
-                  <h3>Request delivery evidence</h3>
-                  <p>Draft a message asking the customer for proof of delivery before the response deadline.</p>
-                  <dl><div><dt>Impact</dt><dd>Customer-visible</dd></div><div><dt>Reviewer</dt><dd>Payment Ops</dd></div></dl>
-                  <button type="button" onClick={openDemo}>Review exact message <span>→</span></button>
+                  <span className="bx-agent">Agent · incident-triage-01</span>
+                  <h3>Request missing telemetry</h3>
+                  <p>Prepare an evidence request for the relevant MCAP interval before return-to-service review.</p>
+                  <dl><div><dt>Impact</dt><dd>Operational evidence</dd></div><div><dt>Reviewer</dt><dd>Safety Operations</dd></div></dl>
+                  <button type="button" onClick={openDemo}>Review evidence request <span>→</span></button>
                 </div>
               </div>
               <div className="bx-shot-foot"><span>API <b>Agent proposes</b></span><span>Dashboard <b>Human decides</b></span></div>
@@ -298,8 +298,8 @@ export default function MarketingSite() {
           <Reveal className="bx-overview-grid">
             <article>
               <span className="bx-kicker">WHAT’S THE PROBLEM?</span>
-              <h2>Your company knowledge is scattered across too many systems.</h2>
-              <p>The answer to an important question may be buried in <strong>email, documents, support conversations, communication tools, operational systems, and internal dashboards</strong>. People lose time searching and AI agents miss the context that explains what happened, how work is usually done, and which source proves it.</p>
+              <h2>When a robot fails, the truth is scattered across systems.</h2>
+              <p>The evidence behind an incident may be buried in <strong>fleet events, telemetry, maintenance tools, GitHub, customer communications, meetings, documents, and internal discussions</strong>. Teams lose time reconstructing state while agents lack the context needed to act safely.</p>
               <div className="bx-fragmented-visual" aria-label="A payment case spread across company systems">
                 <div className="bx-fragmented-case"><small>PAYMENT CASE</small><strong>Order not received</strong><span>$600 dispute</span></div>
                 <div className="bx-fragmented-systems">
@@ -325,8 +325,8 @@ export default function MarketingSite() {
             </article>
             <article>
               <span className="bx-kicker">OUR SOLUTION</span>
-              <h2>One company brain, with every answer linked to evidence.</h2>
-              <p>Ask Bullyx a question and it searches the company information you are allowed to access through connected APIs. It returns a clear answer, surfaces the <strong>most important supporting documents</strong>, and lets you open a source—such as a decisive email—directly beside the answer. Assign the work to an agent and Bullyx supplies <strong>specific instructions based on company practice and the context of that exact task</strong>.</p>
+              <h2>One company brain, built around the reality of physical robots.</h2>
+              <p>Bullyx reconstructs the permission-visible state of a robot at a specific moment. It surfaces <strong>cited incident evidence, missing or conflicting information, the applicable policy, and the exact decision history</strong>. Agents receive sealed context packs and bounded assignments; humans remain accountable for consequential decisions.</p>
               <div className="bx-control-visual" aria-label="Bullyx control flow from agent proposal to governed execution">
                 <div className="bx-control-node"><small>EXTERNAL AGENT</small><strong>Proposes an action</strong><span>Scoped API identity</span></div>
                 <i className="bx-control-arrow">↓</i>
@@ -357,8 +357,8 @@ export default function MarketingSite() {
         <section className="bx-workflow" id="how-it-works">
           <Reveal className="bx-section-intro light">
             <span className="bx-kicker">HOW BULLYX WORKS</span>
-            <h2>People ask in the dashboard.<br/>Agents use the API.</h2>
-            <p>Both work from the same permission-aware company knowledge. People get cited answers and open the evidence beside them; agents receive precise instructions shaped by company practices and task-specific context.</p>
+            <h2>People investigate the incident.<br/>Agents handle bounded work.</h2>
+            <p>Both operate over the same permission-aware evidence graph. People receive cited answers, timelines, and review queues; agents receive sealed context, typed capabilities, explicit prohibitions, and durable handoffs.</p>
           </Reveal>
           <Reveal className="bx-workflow-layout">
             <div className="bx-step-list">
@@ -429,8 +429,8 @@ export default function MarketingSite() {
         <section className="bx-final">
           <Reveal>
             <span className="bx-kicker">JOIN THE WAITLIST</span>
-            <h2>Give every person and agent the context to do the work right.</h2>
-            <p>Connect your company systems, ask questions across all of your knowledge, inspect the source documents behind each answer, and assign evidence-backed work to agents.</p>
+            <h2>Give every robot decision the history behind it.</h2>
+            <p>Connect operational systems, reconstruct incident state, inspect cited evidence, and coordinate human-authorized recovery with bounded software agents.</p>
             <div className="bx-actions">
               <button type="button" onClick={openWaitlist}>Join waitlist <Arrow /></button>
               <button className="bx-final-secondary" type="button" onClick={openDemo}>Request a pilot</button>
