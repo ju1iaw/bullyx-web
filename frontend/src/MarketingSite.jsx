@@ -5,6 +5,10 @@ import './MarketingSite.css'
 
 const Arrow = () => <span aria-hidden="true">↗</span>
 
+function BrainOrbit() {
+  return <div className="bx-brain-orbit" aria-hidden="true"><div className="bx-brain-glow" /><div className="bx-brain-core"><span>BX</span><i /><i /><i /><i /><i /></div><div className="bx-orbit bx-orbit-one"><b /></div><div className="bx-orbit bx-orbit-two"><b /></div><div className="bx-orbit bx-orbit-three"><b /></div><span className="bx-brain-particle p1" /><span className="bx-brain-particle p2" /><span className="bx-brain-particle p3" /><span className="bx-brain-particle p4" /><span className="bx-brain-particle p5" /><span className="bx-brain-particle p6" /><span className="bx-brain-particle p7" /><span className="bx-brain-particle p8" /><span className="bx-brain-label bx-label-left">COMPANY CONTEXT</span><span className="bx-brain-label bx-label-right">ROBOT CONTEXT</span></div>
+}
+
 function Reveal({ children, className = '' }) {
   const ref = useRef(null)
   useEffect(() => {
@@ -215,7 +219,7 @@ export default function MarketingSite() {
     <div className="bx-site">
       <header className="bx-nav">
         <a className="bx-logo" href="#top" aria-label="Bullyx home" onClick={closeMenu}>
-          <img src="/bullyx-logo-light.png" alt="Bullyx" width="140" height="105" />
+          <img src="/bullyx-logo-new.png" alt="Bullyx" width="140" height="105" />
         </a>
         <nav className={menu ? 'open' : ''} aria-label="Main navigation">
           <a href="#product" onClick={closeMenu}>Overview</a>
@@ -244,6 +248,7 @@ export default function MarketingSite() {
           </div>
 
           <div className="bx-hero-product">
+            <BrainOrbit />
             <div className="bx-product-shot" aria-label="Robot incident awaiting return-to-service review">
               <div className="bx-shot-bar"><span>INCIDENT WORKSPACE</span><div><i /> Evidence incomplete</div></div>
               <div className="bx-case-head">
@@ -432,7 +437,7 @@ export default function MarketingSite() {
       </main>
 
       <footer>
-        <a className="bx-logo" href="#top" aria-label="Bullyx home"><img src="/bullyx-logo-light.png" alt="Bullyx" width="120" height="90" /></a>
+        <a className="bx-logo" href="#top" aria-label="Bullyx home"><img src="/bullyx-logo-new.png" alt="Bullyx" width="120" height="90" /></a>
         <p>Operational intelligence for robotics companies.</p>
         <span>© 2026 BULLYX, INC.</span>
       </footer>
