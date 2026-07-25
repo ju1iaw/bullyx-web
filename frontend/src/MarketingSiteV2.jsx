@@ -21,7 +21,7 @@ const corePhases = [
   {
     eyebrow: '02 / EVIDENCE IN MOTION',
     title: 'Every decision breaks into proof.',
-    copy: 'The intelligence core separates an answer into the logs, observations, configurations, policies, and human decisions that actually support it.',
+    copy: 'The company brain separates an answer into the logs, observations, configurations, policies, and human decisions that actually support it.',
   },
   {
     eyebrow: '03 / CONTEXT THAT TRAVELS',
@@ -196,10 +196,10 @@ function BrainBreakup() {
           </div>
         </div>
 
-        <div ref={stageRef} className="bx2-brain-stage" aria-label="3D intelligence core separating into evidence fragments">
+        <div ref={stageRef} className="bx2-brain-stage" aria-label="Stylized 3D company brain separating into evidence fragments">
           <div className="bx2-brain-aura" />
           <div ref={coreRef} className="bx2-core-node" />
-          <img ref={wholeRef} className="bx2-brain-whole" src="/assets/bullyx-core.webp" alt="" />
+          <img ref={wholeRef} className="bx2-brain-whole" src="/assets/bullyx-brain-3d.webp" alt="" />
           <div className="bx2-brain-pieces" aria-hidden="true">
             {corePieces.map((piece, index) => (
               <i
