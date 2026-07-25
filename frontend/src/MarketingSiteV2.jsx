@@ -158,8 +158,9 @@ function BrainBreakup() {
       if (wholeRef.current) wholeRef.current.style.opacity = String(Math.max(0, 1 - Math.max(0, (progress - 0.02) / 0.13)))
       if (stageRef.current) stageRef.current.style.transform = `perspective(1250px) rotateX(${4 - eased * 9}deg) rotateY(${-9 + eased * 19}deg) scale(${1 - eased * 0.035})`
       if (coreRef.current) {
+        const coreReveal = Math.min(1, Math.max(0, (progress - 0.18) / 0.32))
         coreRef.current.style.transform = `translate(-50%, -50%) scale(${0.82 + eased * 0.36}) rotate(${eased * 150}deg)`
-        coreRef.current.style.opacity = String(0.34 + eased * 0.66)
+        coreRef.current.style.opacity = String(coreReveal * (0.34 + eased * 0.66))
       }
       if (progressRef.current) progressRef.current.style.transform = `scaleX(${progress})`
 
