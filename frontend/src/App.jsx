@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import MarketingSite from './MarketingSite'
+import MarketingSite from './MarketingSiteV2'
 import { AuthProvider, useAuth } from './AuthContext'
 import AccountApp from './AccountApp'
 

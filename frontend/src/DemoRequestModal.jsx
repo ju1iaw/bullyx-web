@@ -1,6 +1,9 @@
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 
-const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID
+// Keep the public lead forms usable in a fresh deployment. A hosted environment
+// can still override this value with VITE_FORMSPREE_ID.
+const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID || 'mnjepvpl'
+const LEADS_EMAIL = import.meta.env.VITE_LEADS_EMAIL || 'bullyxai@gmail.com'
 
 const copy = {
   demo: {
@@ -42,6 +45,8 @@ const emptyForm = {
 export default function DemoRequestModal({ open, onClose, intent = 'demo' }) {
   const titleId = useId()
   const content = copy[intent] || copy.demo
+  const dialogRef = useRef(null)
+  const openerRef = useRef(null)
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
   const [form, setForm] = useState(emptyForm)
@@ -51,16 +56,42 @@ export default function DemoRequestModal({ open, onClose, intent = 'demo' }) {
     setStatus('idle')
     setError('')
     setForm(emptyForm)
+    openerRef.current = document.activeElement
+    const previousOverflow = document.body.style.overflow
+    const focusFrame = window.requestAnimationFrame(() => {
+      const firstField = dialogRef.current?.querySelector('input, textarea, select')
+      const firstControl = dialogRef.current?.querySelector('button, [href], [tabindex]:not([tabindex="-1"])')
+      ;(firstField || firstControl)?.focus()
+    })
     const onKey = (event) => {
       if (event.key === 'Escape') onClose()
+      if (event.key !== 'Tab') return
+      const controls = [...(dialogRef.current?.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])') || [])]
+        .filter((element) => element.getClientRects().length)
+      if (!controls.length) return
+      const first = controls[0]
+      const last = controls[controls.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
     window.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
     return () => {
+      window.cancelAnimationFrame(focusFrame)
       window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
+      document.body.style.overflow = previousOverflow
+      if (openerRef.current?.isConnected) openerRef.current.focus({ preventScroll: true })
     }
   }, [open, onClose, intent])
+
+  useEffect(() => {
+    if (open && status === 'success') dialogRef.current?.querySelector('.bx-modal-success button')?.focus()
+  }, [open, status])
 
   if (!open) return null
 
@@ -71,8 +102,16 @@ export default function DemoRequestModal({ open, onClose, intent = 'demo' }) {
   async function handleSubmit(event) {
     event.preventDefault()
     if (!FORMSPREE_ID || FORMSPREE_ID === 'your_form_id_here') {
-      setStatus('error')
-      setError('This form is not connected yet. Add your Formspree form ID to enable it.')
+      const details = [
+        `Name: ${form.name}`,
+        `Email: ${form.email}`,
+        `Company: ${form.company}`,
+        form.role && `Role: ${form.role}`,
+        '',
+        form.message,
+      ].filter(Boolean).join('\n')
+      window.location.href = `mailto:${LEADS_EMAIL}?subject=${encodeURIComponent(content.subject(form))}&body=${encodeURIComponent(details)}`
+      setStatus('success')
       return
     }
 
@@ -113,6 +152,7 @@ export default function DemoRequestModal({ open, onClose, intent = 'demo' }) {
   return (
     <div className="bx-modal-root" role="presentation" onClick={onClose}>
       <div
+        ref={dialogRef}
         className="bx-modal"
         role="dialog"
         aria-modal="true"

@@ -18,9 +18,9 @@ Open [http://127.0.0.1:5173](http://127.0.0.1:5173).
 
 **Request a demo** and **Join waitlist** both submit to the same Formspree form. Each submission includes a `form_type` field (`demo` or `waitlist`) so you can filter them in the Formspree inbox.
 
-Submissions are stored in [Formspree](https://formspree.io) (inbox + email notifications). You need a free Formspree account and form ID before the live forms work.
+Submissions are stored in [Formspree](https://formspree.io) (inbox + email notifications). The current Bullyx form ID ships as the browser-safe default, so a fresh checkout works without a private `.env` file.
 
-### One-time setup
+### Changing the destination
 
 1. Create an account at [https://formspree.io](https://formspree.io).
 2. Click **New Form**, name it something like `Bullyx demo requests`, and set the notification email to an inbox you check.
@@ -69,13 +69,13 @@ cp public/CNAME ../docs/CNAME 2>/dev/null || cp ../CNAME ../docs/CNAME
 
 Then commit and push `docs/` (and any source changes) to `main`.
 
-`.env` is gitignored on purpose. The Formspree ID is embedded into the JS bundle at build time, so you must rebuild `docs/` on a machine that has `.env` set before deploying.
+`.env` is gitignored on purpose. `VITE_FORMSPREE_ID` overrides the built-in Bullyx form ID and is embedded into the JS bundle at build time, so rebuild `docs/` after changing it.
 
 ## Accounts and organizations (Supabase)
 
 The account area uses Supabase Auth, Postgres, Row Level Security, and Storage. This keeps passwords out of the website and makes profile and organization data durable across devices.
 
-### One-time setup
+### Replacing the Supabase project
 
 1. Create a Supabase project at [supabase.com](https://supabase.com).
 2. Open **SQL editor**, paste in [`supabase/schema.sql`](supabase/schema.sql), and run it.
@@ -88,16 +88,16 @@ VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-public-anon-key
 ```
 
-6. Rebuild and deploy `docs/` using the steps above. The anonymous key is designed for browser use; access is enforced by the included database policies. Never put a Supabase service-role key in this site.
+6. Rebuild and deploy `docs/` using the steps above. The repository includes the browser-safe project URL and publishable key in `frontend/index.html`, so accounts also work on a fresh checkout. A local `.env` overrides those values when needed. Access is enforced by the included database policies; never put a Supabase service-role key in this site.
 
 ## Company Brain / Ask
 
-Run `supabase/migrations/20260719_company_brain.sql` in the Supabase SQL Editor after the base schema. It adds organization-scoped knowledge, conversations, cited messages, answer feedback, and agent assignments.
+Run `supabase/migrations/20260719_company_brain.sql`, then `supabase/migrations/20260725_backend_hardening.sql`, in the Supabase SQL Editor after the base schema. They add organization-scoped knowledge, conversations, cited messages, answer feedback, agent assignments, and the production security rules for those records.
 
 The Qwen key stays in Supabase Edge Function secrets—never in `frontend/.env` or the built website. Configure the provider's OpenAI-compatible endpoint, then deploy the function:
 
 ```bash
-supabase secrets set QWEN_API_KEY=... QWEN_API_BASE_URL=... QWEN_MODEL=qwen-plus
+supabase secrets set QWEN_API_KEY=... QWEN_API_BASE_URL=... QWEN_MODEL=qwen-plus ALLOWED_ORIGINS=https://bullyx.tech,https://www.bullyx.tech,http://127.0.0.1:5173,http://localhost:5173
 supabase functions deploy ask
 ```
 
