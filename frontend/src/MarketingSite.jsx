@@ -285,7 +285,7 @@ export default function MarketingSite() {
                   ))}
                 </div>
               </div>
-              <button type="button" onClick={() => setConnectorsOpen(true)}><span aria-hidden="true">→</span> View evidence sources</button>
+              <button type="button" onClick={() => setConnectorsOpen(true)}><span aria-hidden="true">→</span> View all connectors</button>
             </div>
           </div>
         </section>
