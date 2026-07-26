@@ -1,5 +1,6 @@
-const url = (import.meta.env.VITE_SUPABASE_URL || '').replace(/\/$/, '')
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+const publicConfig = (name) => document.querySelector(`meta[name="${name}"]`)?.content || ''
+const url = (import.meta.env.VITE_SUPABASE_URL || publicConfig('supabase-url')).replace(/\/$/, '')
+const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || publicConfig('supabase-publishable-key')
 
 export const isSupabaseConfigured = Boolean(url && anonKey)
 const sessionKey = 'bullyx.auth.session'
@@ -201,7 +202,7 @@ export async function getKnowledgeDocuments(token, organizationId) {
 }
 
 export async function saveAnswerFeedback(token, values) {
-  return request('/rest/v1/answer_feedback', {
+  return request('/rest/v1/answer_feedback?on_conflict=message_id,created_by', {
     method: 'POST',
     headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
     body: JSON.stringify(values),

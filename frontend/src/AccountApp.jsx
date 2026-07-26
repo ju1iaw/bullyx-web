@@ -10,7 +10,7 @@ function navigate(path, replace = false) {
   window.scrollTo(0, 0)
 }
 
-function Logo() { return <a className="acct-logo" href="/" onClick={(event) => { event.preventDefault(); navigate('/') }}><img src="/bullyx-logo-light.png" alt="Bullyx" /></a> }
+function Logo() { return <a className="acct-logo" href="/" onClick={(event) => { event.preventDefault(); navigate('/') }}><img src="/bullyx-logo-new.png" alt="Bullyx" /></a> }
 function Arrow() { return <span aria-hidden="true">→</span> }
 
 function Field({ label, hint, ...props }) {
