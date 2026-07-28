@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import DemoRequestModal from './DemoRequestModal'
+import BrainPointCloud from './BrainPointCloud'
 import { useAuth } from './AuthContext'
 import './MarketingSiteV2.css'
 
@@ -29,28 +30,6 @@ const corePhases = [
     copy: 'Assign bounded work with exact instructions and the incident evidence needed to investigate—without giving a model operational authority.',
   },
 ]
-
-const corePieces = Array.from({ length: 24 }, (_, index) => {
-  const cell = Math.floor(index / 2)
-  const triangle = index % 2
-  const col = cell % 4
-  const row = Math.floor(cell / 4)
-  const horizontal = col - 1.5
-  const vertical = row - 1
-  const radius = Math.hypot(horizontal / 1.5, vertical)
-  return {
-    col,
-    row,
-    triangle,
-    dx: horizontal * 155 + (triangle ? 58 : -58) + Math.sin(index * 1.7) * 34,
-    dy: vertical * 128 + (triangle ? 46 : -46) + Math.cos(index * 1.2) * 30,
-    dz: (triangle ? 1 : -1) * (75 + (index % 5) * 27) + Math.sin(index * 0.8) * 40,
-    rotateX: (vertical * 32) + (triangle ? 18 : -18),
-    rotateY: (horizontal * 28) + (triangle ? -24 : 24),
-    rotateZ: (triangle ? 1 : -1) * (18 + (index % 6) * 9),
-    delay: Math.min(0.1, (index % 4) * 0.014 + radius * 0.018),
-  }
-})
 
 const productCards = [
   {
@@ -122,11 +101,10 @@ function Reveal({ children, className = '' }) {
 
 function BrainBreakup() {
   const sceneRef = useRef(null)
-  const pieceRefs = useRef([])
-  const wholeRef = useRef(null)
-  const stageRef = useRef(null)
+  const auraRef = useRef(null)
   const coreRef = useRef(null)
-  const progressRef = useRef(null)
+  const meterRef = useRef(null)
+  const progress = useRef(0)
   const [phase, setPhase] = useState(0)
 
   useEffect(() => {
@@ -140,31 +118,23 @@ function BrainBreakup() {
       frame = 0
       const rect = scene.getBoundingClientRect()
       const distance = Math.max(scene.offsetHeight - window.innerHeight, 1)
-      const progress = Math.min(1, Math.max(0, -rect.top / distance))
-      const eased = progress * progress * (3 - 2 * progress)
-      const breakup = Math.min(1, Math.max(0, (progress - 0.035) / 0.87))
+      const value = Math.min(1, Math.max(0, -rect.top / distance))
+      const eased = value * value * (3 - 2 * value)
+      progress.current = value
 
-      pieceRefs.current.forEach((piece, index) => {
-        if (!piece) return
-        const config = corePieces[index]
-        const localProgress = Math.min(1, Math.max(0, (breakup - config.delay) / (1 - config.delay)))
-        const depthEase = localProgress * localProgress * (3 - 2 * localProgress)
-        const drift = Math.sin(progress * Math.PI * 2 + index * 0.63) * 9 * depthEase
-        const scale = 1 - depthEase * 0.12
-        piece.style.transform = `translate3d(${config.dx * depthEase}px, ${(config.dy * depthEase) + drift}px, ${config.dz * depthEase}px) rotateX(${config.rotateX * depthEase}deg) rotateY(${config.rotateY * depthEase}deg) rotateZ(${config.rotateZ * depthEase}deg) scale(${scale})`
-        piece.style.opacity = String(1 - depthEase * 0.06)
-      })
-
-      if (wholeRef.current) wholeRef.current.style.opacity = String(Math.max(0, 1 - Math.max(0, (progress - 0.02) / 0.13)))
-      if (stageRef.current) stageRef.current.style.transform = `perspective(1250px) rotateX(${4 - eased * 9}deg) rotateY(${-9 + eased * 19}deg) scale(${1 - eased * 0.035})`
+      if (auraRef.current) {
+        const bloom = Math.min(1, Math.max(0, (value - 0.2) / 0.28))
+        auraRef.current.style.transform = `scale(${1 + bloom * 0.85 - eased * 0.3})`
+        auraRef.current.style.opacity = String(0.55 + bloom * 0.45 - eased * 0.4)
+      }
       if (coreRef.current) {
-        const coreReveal = Math.min(1, Math.max(0, (progress - 0.18) / 0.32))
+        const coreReveal = Math.min(1, Math.max(0, (value - 0.18) / 0.32))
         coreRef.current.style.transform = `translate(-50%, -50%) scale(${0.82 + eased * 0.36}) rotate(${eased * 150}deg)`
         coreRef.current.style.opacity = String(coreReveal * (0.34 + eased * 0.66))
       }
-      if (progressRef.current) progressRef.current.style.transform = `scaleX(${progress})`
+      if (meterRef.current) meterRef.current.style.transform = `scaleX(${value})`
 
-      const nextPhase = progress < 0.34 ? 0 : progress < 0.7 ? 1 : 2
+      const nextPhase = value < 0.34 ? 0 : value < 0.7 ? 1 : 2
       if (nextPhase !== currentPhase) {
         currentPhase = nextPhase
         setPhase(nextPhase)
@@ -197,31 +167,17 @@ function BrainBreakup() {
           </div>
         </div>
 
-        <div ref={stageRef} className="bx2-brain-stage" aria-label="Stylized 3D company brain separating into evidence fragments">
-          <div className="bx2-brain-aura" />
+        <div className="bx2-brain-stage">
+          <div ref={auraRef} className="bx2-brain-aura" />
           <div ref={coreRef} className="bx2-core-node" />
-          <img ref={wholeRef} className="bx2-brain-whole" src="/assets/bullyx-brain-3d.webp" alt="" />
-          <div className="bx2-brain-pieces" aria-hidden="true">
-            {corePieces.map((piece, index) => (
-              <i
-                key={`${piece.row}-${piece.col}-${piece.triangle}`}
-                ref={(node) => { pieceRefs.current[index] = node }}
-                className={`bx2-brain-piece triangle-${piece.triangle}`}
-                style={{
-                  left: `${piece.col * 25}%`,
-                  top: `${piece.row * (100 / 3)}%`,
-                  backgroundPosition: `${piece.col * (100 / 3)}% ${piece.row * 50}%`,
-                }}
-              />
-            ))}
-          </div>
+          <BrainPointCloud progressRef={progress} />
           <span className="bx2-orbit-label label-one">TELEMETRY</span>
           <span className="bx2-orbit-label label-two">INCIDENTS</span>
           <span className="bx2-orbit-label label-three">CONFIG</span>
           <span className="bx2-orbit-label label-four">SERVICE</span>
         </div>
 
-        <div className="bx2-scroll-meter"><span>SCROLL TO DISASSEMBLE</span><i><b ref={progressRef} /></i></div>
+        <div className="bx2-scroll-meter"><span>SCROLL TO DETONATE</span><i><b ref={meterRef} /></i></div>
       </div>
     </section>
   )
