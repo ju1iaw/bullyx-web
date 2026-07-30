@@ -193,28 +193,18 @@
 .bx2-brain-stage:before,.bx2-brain-stage:after{content:"";position:absolute;z-index:0;inset:9%;border:1px solid rgba(215,239,154,.17);border-radius:50%;pointer-events:none}
 .bx2-brain-stage:before{transform:rotateX(69deg) rotateZ(-11deg);animation:bx2-ring 13s linear infinite}
 .bx2-brain-stage:after{inset:19%;border-style:dashed;transform:rotateY(72deg) rotateZ(18deg);animation:bx2-ring-reverse 10s linear infinite}
-.bx2-brain-aura{position:absolute;inset:7%;border-radius:50%;background:radial-gradient(circle,rgba(206,242,145,.3),rgba(98,164,112,.1) 42%,transparent 70%);filter:blur(29px);animation:bx2-breathe 4s ease-in-out infinite}
+.bx2-brain-aura{position:absolute;inset:7%;border-radius:50%;background:radial-gradient(circle,rgba(206,242,145,.3),rgba(98,164,112,.1) 42%,transparent 70%);filter:blur(29px);animation:bx2-breathe 4s ease-in-out infinite;will-change:transform,opacity}
 .bx2-core-node{position:absolute;z-index:5;left:50%;top:50%;width:14%;height:14%;opacity:0;clip-path:polygon(50% 0,92% 24%,92% 76%,50% 100%,8% 76%,8% 24%);background:conic-gradient(from 30deg,rgba(246,255,208,.96),rgba(180,230,104,.7),rgba(71,142,82,.62),rgba(225,250,158,.92),rgba(102,181,91,.72),rgba(246,255,208,.96));box-shadow:0 0 34px rgba(215,239,154,.58);mix-blend-mode:screen;will-change:transform,opacity;pointer-events:none}
 .bx2-core-node:before{content:"";position:absolute;inset:17%;clip-path:inherit;background:radial-gradient(circle at 35% 28%,#fffde8,rgba(216,243,142,.92) 32%,rgba(62,128,77,.66) 70%);box-shadow:inset 0 0 18px rgba(255,255,255,.42)}
-.bx2-brain-whole,.bx2-brain-pieces{position:absolute;inset:0;width:100%;height:100%}
-.bx2-brain-whole{object-fit:contain;z-index:1;filter:drop-shadow(0 28px 28px rgba(0,0,0,.24)) drop-shadow(0 0 32px rgba(206,242,169,.24));will-change:opacity}
-.bx2-brain-pieces{z-index:2}
-.bx2-brain-piece{
+.bx2-brain-canvas{
   position:absolute;
-  width:25.2%;
-  height:33.6%;
+  z-index:3;
+  inset:-15%;
+  width:130%;
+  height:130%;
   display:block;
-  background-image:url('/assets/bullyx-brain-3d.webp');
-  background-size:400% 300%;
-  background-repeat:no-repeat;
-  transform-origin:center;
-  will-change:transform,opacity;
-  transform-style:preserve-3d;
-  backface-visibility:visible;
-  filter:drop-shadow(0 13px 9px rgba(0,0,0,.18)) drop-shadow(0 0 8px rgba(199,232,162,.12));
+  pointer-events:none;
 }
-.bx2-brain-piece.triangle-0{clip-path:polygon(0 0,100% 0,0 100%)}
-.bx2-brain-piece.triangle-1{clip-path:polygon(100% 0,100% 100%,0 100%)}
 .bx2-orbit-label{position:absolute;z-index:4;padding:7px 10px;border:1px solid rgba(215,239,154,.22);border-radius:999px;background:rgba(13,42,30,.58);color:#b9cdbf;font-size:8px;letter-spacing:.12em;backdrop-filter:blur(8px)}
 .bx2-orbit-label:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--lime);margin-right:7px}
 .bx2-orbit-label.label-one{left:12%;top:17%}.bx2-orbit-label.label-two{right:5%;top:29%}.bx2-orbit-label.label-three{left:7%;bottom:19%}.bx2-orbit-label.label-four{right:11%;bottom:13%}
@@ -341,13 +331,7 @@
   .bx2-reveal{opacity:1;transform:none;transition:none}
   .bx2-brain-stage{transform:none!important}
   .bx2-brain-stage:before,.bx2-brain-stage:after,.bx2-brain-aura{animation:none}
-  .bx2-brain-pieces,.bx2-core-node{display:none}
-  .bx2-brain-whole{opacity:1!important}
-}
-
-@media(prefers-reduced-motion:reduce){
-  .bx2-reveal{opacity:1;transform:none}
-  .bx2-preview-orbit,.bx2-floating-chip,.bx2-brain-aura{animation:none}
-  .bx2-brain-whole{opacity:1!important}
-  .bx2-brain-pieces{display:none}
+  .bx2-preview-orbit,.bx2-floating-chip{animation:none}
+  .bx2-core-node{display:none}
+  .bx2-brain-canvas{opacity:1}
 }
